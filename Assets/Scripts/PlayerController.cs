@@ -11,14 +11,11 @@ public class PlayerController : MonoBehaviour
     public float lookXLimit = 7.5f;
     public Camera playerCamera;
     Vector3 moveDirection = Vector3.zero;
-    CharacterController characterController;
     public float rotationX = 0;
     // Start is called before the first frame update
     [HideInInspector]
     bool canMove = true;
     Rigidbody rb;
-
-    private GameObject collisionGameObject = null;
 
     float moveDirectionY;
 
@@ -28,7 +25,6 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody>();
-        characterController = GetComponent<CharacterController>();
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
         jump = new Vector3(0.0f, 2.0f, 0.0f);
@@ -53,35 +49,29 @@ public class PlayerController : MonoBehaviour
             Debug.Log("Jump");
             rb.AddForce(transform.up * jumpSpeed * 500 * Time.deltaTime, ForceMode.Impulse);
         }
-        if(this.collisionGameObject != null){
-            transform.rotation = Quaternion.Slerp(transform.rotation, this.collisionGameObject.transform.rotation, Time.deltaTime * 1.0f);
-        }
 
         rb.MovePosition(rb.position + moveDirection);
-
-        //characterController.Move(moveDirection * Time.deltaTime);
     }
 
-    void OnCollisionExit(Collision other) {
-        if (other.gameObject.tag == "platform")
-        {
-            this.collisionGameObject = null;
-        }
-    }
     void OnCollisionEnter(Collision other)
     {
         if (other.gameObject.tag == "platform")
         {
-            // FIXME:
             var thisTransform = this.gameObject.transform;
-            // thisTransform.eulerAngles = new Vector3(thisTransform.eulerAngles.x, thisTransform.eulerAngles.y, collision.transform.eulerAngles.z);
-            // thisTransform.rotation = new Quaternion(thisTransform.rotation.x, thisTransform.rotation.y, thisTransform.rotation.z, 1.0f) * Vector3.forward;
-            this.collisionGameObject = other.gameObject;
+
+            Vector3 axis; 
+            float angle;
+
+            axis = Vector3.Cross(-transform.up, -other.transform.up);
+            if (axis != Vector3.zero)
+            {
+                angle = Mathf.Atan2(Vector3.Magnitude(axis), Vector3.Dot(-transform.up, -other.transform.up));
+                transform.RotateAround(axis, angle);
+            }
+
             Vector3 gDirection = new Quaternion(0.0f, 0.0f, other.gameObject.transform.rotation.z, 1.0f) * Vector3.down;
 
             Physics.gravity = gDirection * 9.81f;
-            Debug.Log(Physics.gravity);
-            //Physics.gravity = -Physics.gravity;
         }
     }
 }
