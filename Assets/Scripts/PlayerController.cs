@@ -58,7 +58,8 @@ public class PlayerController : MonoBehaviour
 
         if (this.collisionGameObject != null)
         {
-            transform.rotation = Quaternion.Slerp(transform.rotation, this.collisionGameObject.transform.rotation, Time.deltaTime * 1.0f);
+            Quaternion tempRotate = new Quaternion(transform.rotation.x, transform.rotation.y, this.collisionGameObject.transform.rotation.z, transform.rotation.w);
+            transform.rotation = Quaternion.Slerp(transform.rotation, tempRotate, Time.deltaTime * 1.0f);
         }
 
         rb.MovePosition(rb.position + moveDirection);
