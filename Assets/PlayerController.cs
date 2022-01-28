@@ -18,6 +18,8 @@ public class PlayerController : MonoBehaviour
     bool canMove = true;
     Rigidbody rb;
 
+    float moveDirectionY;
+
     public Vector3 jump;
     public float jumpForce = 2.0f;
 
@@ -38,26 +40,20 @@ public class PlayerController : MonoBehaviour
         playerCamera.transform.localRotation = Quaternion.Euler(rotationX, 0, 0);
         transform.rotation *= Quaternion.Euler(0, Input.GetAxis("Mouse X") * lookSpeed, 0);
 
-        Vector3 forward = transform.TransformDirection(Vector3.forward);
-        Vector3 right = transform.TransformDirection(Vector3.right);
-
         bool isRunning = Input.GetKey(KeyCode.LeftShift);
         float curSpeedX = canMove ? (isRunning ? runningSpeed : walkSpeed) * Input.GetAxis("Vertical") : 0;
         float curSpeedY = canMove ? (isRunning ? runningSpeed : walkSpeed) * Input.GetAxis("Horizontal") : 0;
 
-        float moveDirectionY = moveDirection.y;
+        moveDirection = (transform.forward * curSpeedX * Time.deltaTime) + (transform.right * curSpeedY * Time.deltaTime);
 
         if (Input.GetKeyDown(KeyCode.Space))
         {
             Debug.Log("Jump");
-            moveDirection.y += jumpSpeed;
-        }
-        else
-        {
-            moveDirection.y = moveDirectionY;
+            rb.AddForce(transform.up * jumpSpeed * 500 * Time.deltaTime, ForceMode.Impulse);
         }
 
-        moveDirection = (forward * curSpeedX) + (right * curSpeedY);
-        characterController.Move(moveDirection * Time.deltaTime);
+        rb.MovePosition(rb.position + moveDirection);
+
+        //characterController.Move(moveDirection * Time.deltaTime);
     }
 }
