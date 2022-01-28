@@ -18,6 +18,8 @@ public class PlayerController : MonoBehaviour
     bool canMove = true;
     Rigidbody rb;
 
+    private GameObject collisionGameObject = null;
+
     float moveDirectionY;
 
     public Vector3 jump;
@@ -51,22 +53,31 @@ public class PlayerController : MonoBehaviour
             Debug.Log("Jump");
             rb.AddForce(transform.up * jumpSpeed * 500 * Time.deltaTime, ForceMode.Impulse);
         }
+        if(this.collisionGameObject != null){
+            transform.rotation = Quaternion.Slerp(transform.rotation, this.collisionGameObject.transform.rotation, Time.deltaTime * 1.0f);
+        }
 
         rb.MovePosition(rb.position + moveDirection);
 
         //characterController.Move(moveDirection * Time.deltaTime);
     }
 
-
-    void OnCollisionEnter(Collision collision)
-    {
-        if (collision.gameObject.tag == "platform")
+    void OnCollisionExit(Collision other) {
+        if (other.gameObject.tag == "platform")
         {
-            -- FIXME:
+            this.collisionGameObject = null;
+        }
+    }
+    void OnCollisionEnter(Collision other)
+    {
+        if (other.gameObject.tag == "platform")
+        {
+            // FIXME:
             var thisTransform = this.gameObject.transform;
-            thisTransform.eulerAngles = new Vector3(thisTransform.eulerAngles.x, thisTransform.eulerAngles.y, collision.transform.eulerAngles.z);
-
-            Vector3 gDirection = new Quaternion(0.0f, 0.0f, collision.gameObject.transform.rotation.z, 1.0f) * Vector3.down;
+            // thisTransform.eulerAngles = new Vector3(thisTransform.eulerAngles.x, thisTransform.eulerAngles.y, collision.transform.eulerAngles.z);
+            // thisTransform.rotation = new Quaternion(thisTransform.rotation.x, thisTransform.rotation.y, thisTransform.rotation.z, 1.0f) * Vector3.forward;
+            this.collisionGameObject = other.gameObject;
+            Vector3 gDirection = new Quaternion(0.0f, 0.0f, other.gameObject.transform.rotation.z, 1.0f) * Vector3.down;
 
             Physics.gravity = gDirection * 9.81f;
             Debug.Log(Physics.gravity);
