@@ -24,6 +24,7 @@ public class PlayerController : MonoBehaviour
 
     public Vector3 jump;
     public float jumpForce = 2.0f;
+    private bool isGoundet = false;
 
     void Start()
     {
@@ -48,12 +49,15 @@ public class PlayerController : MonoBehaviour
 
         moveDirection = (transform.forward * curSpeedX * Time.deltaTime) + (transform.right * curSpeedY * Time.deltaTime);
 
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.Space) && isGoundet)
         {
             Debug.Log("Jump");
             rb.AddForce(transform.up * jumpSpeed * 500 * Time.deltaTime, ForceMode.Impulse);
+            isGoundet = false;
         }
-        if(this.collisionGameObject != null){
+
+        if (this.collisionGameObject != null)
+        {
             transform.rotation = Quaternion.Slerp(transform.rotation, this.collisionGameObject.transform.rotation, Time.deltaTime * 1.0f);
         }
 
@@ -62,7 +66,9 @@ public class PlayerController : MonoBehaviour
         //characterController.Move(moveDirection * Time.deltaTime);
     }
 
-    void OnCollisionExit(Collision other) {
+    void OnCollisionExit(Collision other)
+    {
+        isGoundet = false;
         if (other.gameObject.tag == "platform")
         {
             this.collisionGameObject = null;
@@ -70,13 +76,9 @@ public class PlayerController : MonoBehaviour
     }
     void OnCollisionEnter(Collision other)
     {
+        isGoundet = true;
         if (other.gameObject.tag == "platform")
         {
-            // FIXME:
-            var thisTransform = this.gameObject.transform;
-            // thisTransform.eulerAngles = new Vector3(thisTransform.eulerAngles.x, thisTransform.eulerAngles.y, collision.transform.eulerAngles.z);
-            // thisTransform.rotation = new Quaternion(thisTransform.rotation.x, thisTransform.rotation.y, thisTransform.rotation.z, 1.0f) * Vector3.forward;
-            this.collisionGameObject = other.gameObject;
             Vector3 gDirection = new Quaternion(0.0f, 0.0f, other.gameObject.transform.rotation.z, 1.0f) * Vector3.down;
 
             Physics.gravity = gDirection * 9.81f;
