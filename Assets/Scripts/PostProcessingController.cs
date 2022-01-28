@@ -38,6 +38,6 @@ public class PostProcessingController : MonoBehaviour
         emmisionStep++;
 
         renderer.material.SetColor("_EmissionColor", color);
-        Debug.Log(color);
+        //Debug.Log(color);
     }
 }
