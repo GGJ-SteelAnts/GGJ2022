@@ -21,6 +21,7 @@ public class PlayerController : MonoBehaviour
 
     public Vector3 jump;
     public float jumpForce = 2.0f;
+    private bool isGoundet = false;
 
     void Start()
     {
@@ -44,10 +45,11 @@ public class PlayerController : MonoBehaviour
 
         moveDirection = (transform.forward * curSpeedX * Time.deltaTime) + (transform.right * curSpeedY * Time.deltaTime);
 
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.Space) && isGoundet)
         {
             Debug.Log("Jump");
             rb.AddForce(transform.up * jumpSpeed * 500 * Time.deltaTime, ForceMode.Impulse);
+            isGoundet = false;
         }
 
         rb.MovePosition(rb.position + moveDirection);
@@ -55,6 +57,7 @@ public class PlayerController : MonoBehaviour
 
     void OnCollisionEnter(Collision other)
     {
+        isGoundet = true;
         if (other.gameObject.tag == "platform")
         {
             var thisTransform = this.gameObject.transform;
