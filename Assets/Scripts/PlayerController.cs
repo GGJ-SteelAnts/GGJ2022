@@ -62,7 +62,7 @@ public class PlayerController : MonoBehaviour
     {
         if (collision.gameObject.tag == "platform")
         {
-            this.gameObject.tranform.rotation = collision.gameObject.transform.rotation;
+            this.gameObject.transform.rotation = collision.gameObject.transform.rotation;
         }
     }
 }
