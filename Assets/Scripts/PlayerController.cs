@@ -62,11 +62,13 @@ public class PlayerController : MonoBehaviour
     {
         if (collision.gameObject.tag == "platform")
         {
-            this.gameObject.transform.rotation = collision.gameObject.transform.rotation;
+            -- FIXME:
+            var thisTransform = this.gameObject.transform;
+            thisTransform.eulerAngles = new Vector3(thisTransform.eulerAngles.x, thisTransform.eulerAngles.y, collision.transform.eulerAngles.z);
 
-            Vector3 direction = collision.gameObject.transform.rotation * Vector3.down;
+            Vector3 gDirection = new Quaternion(0.0f, 0.0f, collision.gameObject.transform.rotation.z, 1.0f) * Vector3.down;
 
-            Physics.gravity = direction * 9.81f;
+            Physics.gravity = gDirection * 9.81f;
             Debug.Log(Physics.gravity);
             //Physics.gravity = -Physics.gravity;
         }
