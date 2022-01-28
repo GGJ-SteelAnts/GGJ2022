@@ -56,4 +56,13 @@ public class PlayerController : MonoBehaviour
 
         //characterController.Move(moveDirection * Time.deltaTime);
     }
+
+
+    void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.tag == "platform")
+        {
+            this.gameObject.tranform.rotation = collision.gameObject.transform.rotation;
+        }
+    }
 }
