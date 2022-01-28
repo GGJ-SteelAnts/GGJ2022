@@ -63,7 +63,10 @@ public class PlayerController : MonoBehaviour
         if (collision.gameObject.tag == "platform")
         {
             this.gameObject.transform.rotation = collision.gameObject.transform.rotation;
-            Physics.gravity = (collision.gameObject.transform.rotation * Vector3.forward);
+
+            Vector3 direction = collision.gameObject.transform.rotation * Vector3.down;
+
+            Physics.gravity = direction * 9.81f;
             Debug.Log(Physics.gravity);
             //Physics.gravity = -Physics.gravity;
         }
