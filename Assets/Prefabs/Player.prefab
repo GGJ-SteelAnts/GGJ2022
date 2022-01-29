@@ -4998,6 +4998,7 @@ MonoBehaviour:
   playerCamera: {fileID: 3244356567913423211}
   runningParticles: {fileID: 1608137079}
   rotationX: 0
+  mainObject: {fileID: 3244356567786994345}
   jump: {x: 0, y: 2, z: 0}
   jumpForce: 2
   isRunning: 0

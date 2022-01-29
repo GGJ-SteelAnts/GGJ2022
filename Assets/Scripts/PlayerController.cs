@@ -13,6 +13,7 @@ public class PlayerController : MonoBehaviour
     public ParticleSystem runningParticles;
     Vector3 moveDirection = Vector3.zero;
     public float rotationX = 0;
+    public Transform mainObject;
     // Start is called before the first frame update
     [HideInInspector]
     bool canMove = true;
@@ -22,6 +23,8 @@ public class PlayerController : MonoBehaviour
     public float jumpForce = 2.0f;
     private bool isGoundet = false;
     public bool isRunning = false;
+
+    private Vector3 follow = Vector3.zero;
 
     void Start()
     {
@@ -64,35 +67,39 @@ public class PlayerController : MonoBehaviour
         rb.MovePosition(rb.position + moveDirection);
     }
 
-    void OnCollisionEnter(Collision other)
+    void OnCollisionStay(Collision other)
     {
         isGoundet = true;
         if (other.gameObject.tag == "platform")
         {
-            var thisTransform = this.gameObject.transform;
-
             Vector3 axis;
             float angle;
 
-            axis = Vector3.Cross(-transform.up, -other.transform.up);
+            axis = Vector3.Cross(-transform.up, -other.GetContact(0).normal);
             if (axis != Vector3.zero)
             {
-                angle = Mathf.Atan2(Vector3.Magnitude(axis), Vector3.Dot(-transform.up, -other.transform.up));
+                angle = Mathf.Atan2(Vector3.Magnitude(axis), Vector3.Dot(-transform.up, -other.GetContact(0).normal));
                 transform.RotateAround(axis, angle);
             }
+
             Vector3 gDirection;
             PlatformManager platform = other.gameObject.GetComponent<PlatformManager>();
+
             if (platform != null && platform.type == PlatformManager.PlatformType.Pull)
             {
-                gDirection = new Quaternion(0.0f, 0.0f, other.gameObject.transform.rotation.z, 1.0f) * Vector3.down;
+                gDirection = -transform.up;
             }
             else if (platform != null && platform.type == PlatformManager.PlatformType.Push)
             {
-                gDirection = new Quaternion(0.0f, 0.0f, other.gameObject.transform.rotation.z, 1.0f) * Vector3.up;
+                gDirection = transform.up;
+            }
+            else if (platform != null && (platform.type == PlatformManager.PlatformType.RotateY || platform.type == PlatformManager.PlatformType.RotateZ))
+            {
+                gDirection = -transform.up;
             }
             else
             {
-                gDirection = new Quaternion(0.0f, 0.0f, other.gameObject.transform.rotation.z, 1.0f) * Vector3.down;
+                gDirection = -transform.up;
             }
 
             Physics.gravity = gDirection * 9.81f;
