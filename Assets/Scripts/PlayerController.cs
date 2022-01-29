@@ -113,6 +113,16 @@ public class PlayerController : MonoBehaviour
             jump = false;
         }
 
+        if(rb.velocity.magnitude != 0 && rb.velocity.normalized == this.downDirection.normalized)
+        {
+            // Debug.Log("Player is falling :)");
+            this.isFalling = true;
+        }
+        else
+        {
+            this.isFalling = false;
+        }
+
         if (saveDirection != Vector3.zero)
         {
             Vector3 axis;
