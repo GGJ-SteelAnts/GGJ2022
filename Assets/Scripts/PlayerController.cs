@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    public float maxDistanceFromCenterLine;
+    public float maxDistanceFromCenterLine = 30.0f;
     [Header("Move")]
     public float speed = 7.5f;
     public float maxSpeed = 15.0f;
@@ -193,7 +193,6 @@ public class PlayerController : MonoBehaviour
             Debug.Log("Player fell out of map.");
             rb.velocity = Vector3.zero;
             Physics.gravity = -Vector3.up * 9.81f;
-
             UnityEngine.SceneManagement.SceneManager.LoadScene(0);
         }
     }
