@@ -23,8 +23,7 @@ public class PlayerController : MonoBehaviour
     private bool isGrounded = false;
     public bool isRunning = false;
 
-    private Vector3 saveRotation;
-    private Vector3 saveStartRotation;
+    private Vector3 saveDirection;
 
     private Vector3 downDirection;
 
@@ -81,6 +80,16 @@ public class PlayerController : MonoBehaviour
             rb.AddForce(transform.up * jumpSpeed * 100 * Time.deltaTime, ForceMode.Impulse);
             jump = false;
         }
+
+        if (saveDirection != Vector3.zero)
+        {
+            Vector3 axis;
+            float angle;
+            axis = Vector3.Cross(-transform.up, saveDirection);
+
+            angle = Mathf.Atan2(Vector3.Magnitude(axis), Vector3.Dot(-transform.up, saveDirection));
+            transform.RotateAround(axis, angle * Time.deltaTime * 5f);
+        }
     }
 
     void OnCollisionExit(Collision other)
@@ -100,9 +109,6 @@ public class PlayerController : MonoBehaviour
             // Debug.Log("ERROR");
             return;
         }
-        Vector3 axis;
-        float angle;
-        axis = Vector3.Cross(-transform.up, -other.GetContact(0).normal);
 
         if (other.GetContact(0).normal == other.transform.forward
             || other.GetContact(0).normal == -other.transform.forward
@@ -116,12 +122,7 @@ public class PlayerController : MonoBehaviour
         {
             return;
         }
-        // if (platform.type == PlatformManager.PlatformType.SpeedUp)
-        // {
-            angle = Mathf.Atan2(Vector3.Magnitude(axis), Vector3.Dot(-transform.up, -other.GetContact(0).normal));
-            transform.Rotate(axis * angle * 100.0f * Time.deltaTime);
-            //transform.RotateAround(axis, angle);
-        // }
+
         // TODO: Handle other PlatformTypes
         Physics.gravity = -other.GetContact(0).normal * 9.81f;
 
@@ -145,16 +146,8 @@ public class PlayerController : MonoBehaviour
             {
                 return;
             }
-            Vector3 axis;
-            float angle;
 
-            axis = Vector3.Cross(-transform.up, -other.GetContact(0).normal);
-            if (axis != Vector3.zero)
-            {
-                angle = Mathf.Atan2(Vector3.Magnitude(axis), Vector3.Dot(-transform.up, -other.GetContact(0).normal));
-                transform.Rotate(axis * angle * 100.0f * Time.deltaTime);
-                //transform.RotateAround(axis, angle);
-            }
+            saveDirection = -other.GetContact(0).normal;
 
             Vector3 gDirection;
             PlatformManager platform = other.gameObject.GetComponent<PlatformManager>();
