@@ -16,6 +16,8 @@ public class PlayerController : MonoBehaviour
     Rigidbody rb;
     float moveDirectionY;
     public bool isRunning = false;
+
+    public bool isFalling = false;
     [Header("Jump")]
     public float jumpSpeed = 7.5f;
     [HideInInspector]
