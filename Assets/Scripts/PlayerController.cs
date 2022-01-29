@@ -111,7 +111,13 @@ public class PlayerController : MonoBehaviour
             return;
         }
 
-        if (other.GetContact(0).normal == other.transform.forward || other.GetContact(0).normal == -other.transform.forward)
+        if (other.GetContact(0).normal == other.transform.forward
+                || other.GetContact(0).normal == -other.transform.forward
+                || (other.GetContact(0).normal != -other.transform.up
+                    && other.GetContact(0).normal != other.transform.up
+                    && other.GetContact(0).normal != other.transform.right
+                    && other.GetContact(0).normal != -other.transform.right)
+            )
         {
             return;
         }
@@ -127,7 +133,13 @@ public class PlayerController : MonoBehaviour
         if (other.gameObject.tag == "platform")
         {
 
-            if (other.GetContact(0).normal == other.transform.forward || other.GetContact(0).normal == -other.transform.forward)
+            if (other.GetContact(0).normal == other.transform.forward
+                || other.GetContact(0).normal == -other.transform.forward
+                || (other.GetContact(0).normal != -other.transform.up
+                    && other.GetContact(0).normal != other.transform.up
+                    && other.GetContact(0).normal != other.transform.right
+                    && other.GetContact(0).normal != -other.transform.right)
+            )
             {
                 return;
             }
