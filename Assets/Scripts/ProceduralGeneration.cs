@@ -5,10 +5,10 @@ using UnityEngine;
 public class ProceduralGeneration : MonoBehaviour
 {
     public List<GameObject> levelBlocks = new List<GameObject>();
-    private List<GameObject> spawnedLevelBlocks = new List<GameObject>();
+    public List<GameObject> spawnedLevelBlocks = new List<GameObject>();
     public GameObject player = null;
     private Vector3 lastBlockSpawnPoint;
-    private GameObject lastBlock;
+    public GameObject lastBlock;
     private GameObject lastBlockPrefab;
     private int blockIndex = 0;
     private int spavnetobjectIndex = 0;
@@ -34,7 +34,7 @@ public class ProceduralGeneration : MonoBehaviour
         int pieceCount = 10;
         float radius = (pieceCount / 2) * 2;
         float angle = 360f / (float)pieceCount;
-        Vector3 centerPoint = new Vector3(lastObject.transform.position.x, (lastObject.transform.position.y), lastObject.transform.position.z);
+        Vector3 centerPoint = new Vector3(lastObject.transform.position.x, (lastObject.transform.position.y + radius), lastObject.transform.position.z);
 
         for (int i = 1; i < pieceCount + 2; i++)
         {
@@ -52,12 +52,14 @@ public class ProceduralGeneration : MonoBehaviour
     void Update()
     {
         Vector3 playerPosition = this.player.transform.position;
-        float distance = Vector3.Distance(this.spawnedLevelBlocks[spavnetobjectIndex].transform.position, playerPosition);
+        float distance = Vector3.Distance(this.spawnedLevelBlocks[0].transform.position, playerPosition);
+
+        Debug.Log("Index" + 0);
 
         if (distance > 10.0f && this.spawnedLevelBlocks.Count > 10)
         {
-            Destroy(this.spawnedLevelBlocks[spavnetobjectIndex]);
-            this.spawnedLevelBlocks.Remove(this.spawnedLevelBlocks[spavnetobjectIndex]);
+            Destroy(this.spawnedLevelBlocks[0]);
+            this.spawnedLevelBlocks.Remove(this.spawnedLevelBlocks[0]);
             spavnetobjectIndex++;
         }
 
@@ -70,7 +72,9 @@ public class ProceduralGeneration : MonoBehaviour
             Bounds b = new Bounds(bounds.center * scale, bounds.size * scale);
 
             int blockToSpawn = Random.Range(0, levelBlocks.Count - 1);
+
             Debug.Log(blockToSpawn);
+
             GameObject instantiatedGameObject;
             GameObject blockObjToSpawn;
 
@@ -86,13 +90,21 @@ public class ProceduralGeneration : MonoBehaviour
                 {
                     blockToSpawn--;
                 }
+                if ((blockToSpawn + 1) <= levelBlocks.Count)
+                {
+                    blockToSpawn++;
+                }
+                else if ((blockToSpawn - 1) >= levelBlocks.Count)
+                {
+                    blockToSpawn--;
+                }
             }
 
             if ((blockToSpawn > -1 && (blockToSpawn < (levelBlocks.Count - 1))))
             {
                 blockObjToSpawn = levelBlocks[blockToSpawn];
                 instantiatedGameObject = Instantiate(blockObjToSpawn, new Vector3(0, 0, blockIndex * (b.size.z + 1.0f)), (Quaternion.identity));
-                this.spawnedLevelBlocks.Add(lastBlock);
+                this.spawnedLevelBlocks.Add(instantiatedGameObject);
                 blockIndex++;
             }
             else
@@ -110,10 +122,11 @@ public class ProceduralGeneration : MonoBehaviour
 
             Debug.Log("Spawn" + blockToSpawn);
 
+
             lastBlock = instantiatedGameObject;
             lastBlockSpawnPoint = instantiatedGameObject.transform.position;
             lastBlockPrefab = blockObjToSpawn;
-
         }
     }
 }
+
