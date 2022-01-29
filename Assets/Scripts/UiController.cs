@@ -23,7 +23,7 @@ public class UiController : MonoBehaviour
     }
     void SaveGame()
     {
-        PlayerPrefs.SetInt(PlayerController.highScore);
+        PlayerPrefs.SetInt("HighestScore", this.highScore);
         PlayerPrefs.Save();
         Debug.Log("Game data saved!");
     }
