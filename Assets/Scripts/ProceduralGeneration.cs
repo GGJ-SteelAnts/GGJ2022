@@ -22,7 +22,7 @@ public class ProceduralGeneration : MonoBehaviour
         if (renderers.Length > 0)
         {
             Bounds bounds = renderers[0].bounds;
-            for (int i = 1, ni = renderers.Length; i < ni; i++)
+            for (int i = 0; i < renderers.Length; i++)
             {
                 bounds.Encapsulate(renderers[i].bounds);
             }
@@ -32,13 +32,14 @@ public class ProceduralGeneration : MonoBehaviour
         {
             return new Bounds();
         }
+
     }
     GameObject drawPlatform(GameObject lastObject, GameObject objToSpawn, GameObject parentLevelObject)
     {
         Bounds bounds = this.getPrefabBounds(lastObject);
         Bounds b = new Bounds(bounds.center, bounds.size);
 
-        Vector3 nextBlockLocation = new Vector3(lastObject.transform.position.x, lastObject.transform.position.y, lastObject.transform.position.z + b.size.z + 1.0f);
+        Vector3 nextBlockLocation = new Vector3(lastObject.transform.position.x, lastObject.transform.position.y, lastObject.transform.position.z + b.size.z);
 
         GameObject newObject = Instantiate(objToSpawn, nextBlockLocation, (Quaternion.identity));
         newObject.transform.parent = parentLevelObject.transform;
@@ -60,7 +61,7 @@ public class ProceduralGeneration : MonoBehaviour
         Bounds bounds = this.getPrefabBounds(lastObject);
         Bounds b = new Bounds(bounds.center, bounds.size);
 
-        Vector3 centerPoint = new Vector3(lastObject.transform.position.x, (lastObject.transform.position.y + radius), lastObject.transform.position.z + b.size.z + 1.0f);
+        Vector3 centerPoint = new Vector3(lastObject.transform.position.x, (lastObject.transform.position.y + radius), lastObject.transform.position.z + b.size.z);
 
         float heightOffset = radius;
 
