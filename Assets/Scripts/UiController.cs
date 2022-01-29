@@ -16,6 +16,8 @@ public class UiController : MonoBehaviour
     void Start()
     {
         startPosition = this.player.transform.position;
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
     }
 
     // Update is called once per frame
@@ -25,8 +27,14 @@ public class UiController : MonoBehaviour
         distance = Vector3.Distance(this.startPosition, this.playerPosition);
         if (oldDistance < distance)
         {
-            uiDistance.text = "Score : " + distance.ToString("0");
+            uiDistance.text = "Distance : " + distance.ToString("0");
             oldDistance = distance;
         }
+    }
+
+    //MENU
+    public void exitGame()
+    {
+        Application.Quit();
     }
 }

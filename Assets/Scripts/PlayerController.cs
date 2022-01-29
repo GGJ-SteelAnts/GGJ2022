@@ -33,6 +33,10 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody>();
+    }
+
+    public void disableCursor()
+    {
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
     }
@@ -133,9 +137,9 @@ public class PlayerController : MonoBehaviour
             || other.GetContact(0).normal == -other.transform.forward
             || (
                     other.GetContact(0).normal != -other.transform.up
-                &&  other.GetContact(0).normal != other.transform.up
-                &&  other.GetContact(0).normal != -other.transform.right
-                &&  other.GetContact(0).normal != other.transform.right
+                && other.GetContact(0).normal != other.transform.up
+                && other.GetContact(0).normal != -other.transform.right
+                && other.GetContact(0).normal != other.transform.right
                 )
             )
             {
@@ -154,8 +158,9 @@ public class PlayerController : MonoBehaviour
 
             Vector3 gDirection;
             PlatformManager platform = other.gameObject.GetComponent<PlatformManager>();
-            gDirection = -other.GetContact(0).normal;
-            if (platform == null){
+            gDirection = -transform.up;
+            if (platform == null)
+            {
                 // FIXME: remove
                 this.downDirection = -transform.up;
                 return;
