@@ -100,7 +100,8 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    void OnCollisionStay(Collision other) {
+    void OnCollisionStay(Collision other)
+    {
         if (other.gameObject.tag != "platform") return;
         PlatformManager platform = other.gameObject.GetComponent<PlatformManager>();
         if (platform == null)
@@ -135,37 +136,28 @@ public class PlayerController : MonoBehaviour
 
             Vector3 gDirection;
             PlatformManager platform = other.gameObject.GetComponent<PlatformManager>();
-            gDirection = -transform.up;
-            if (platform == null)
+            gDirection = -other.GetContact(0).normal;
+            switch (platform.type)
             {
-                // FIXME: remove
-                this.downDirection = -transform.up;
-                return;
-            }
-            if (platform.type == PlatformManager.PlatformType.Pull)
-            {
-                gDirection = -other.GetContact(0).normal;
-            }
-            else if (platform.type == PlatformManager.PlatformType.Push)
-            {
-                gDirection = -other.GetContact(0).normal;
-            }
-            else if ((platform.type == PlatformManager.PlatformType.RotateY || platform.type == PlatformManager.PlatformType.RotateZ))
-            {
-                gDirection = -other.GetContact(0).normal;
-            }
-            else if (platform.type == PlatformManager.PlatformType.SpeedUp)
-            {
-                rb.AddForce(other.transform.forward * platform.speed * Time.deltaTime, ForceMode.Impulse);
-                gDirection = -other.GetContact(0).normal;
-            }
-            else if (platform.type == PlatformManager.PlatformType.SpeedDown)
-            {
-                rb.AddForce(other.transform.forward * platform.speed * 10 * Time.deltaTime, ForceMode.Impulse);
-                gDirection = -other.GetContact(0).normal;
+                case PlatformManager.PlatformType.Push:
+                    break;
+                case PlatformManager.PlatformType.Pull:
+                    break;
+                case PlatformManager.PlatformType.RotateY:
+                    break;
+                case PlatformManager.PlatformType.RotateZ:
+                    break;
+                case PlatformManager.PlatformType.SpeedUp:
+                    rb.AddForce(other.transform.forward * platform.speed * Time.deltaTime, ForceMode.Impulse);
+                    break;
+                case PlatformManager.PlatformType.SpeedDown:
+                    rb.AddForce(other.transform.forward * platform.speed * 10 * Time.deltaTime, ForceMode.Impulse);
+                    break;
+                default:
+                    gDirection = -transform.up;
+                    break;
             }
             this.downDirection = gDirection;
-
             Physics.gravity = gDirection * 9.81f;
         }
     }
