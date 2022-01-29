@@ -4,8 +4,12 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    public float walkSpeed = 7.5f;
-    public float runningSpeed = 7.5f;
+    public float speed = 7.5f;
+    public float maxSpeed = 15.0f;
+    public float minSpeed = 5.0f;
+    [HideInInspector]
+    public float currentSpeed = 0f;
+    private float modifier = 0.0f;
     public float jumpSpeed = 7.5f;
     public float lookSpeed = 7.5f;
     public float lookXLimit = 40.0f;
@@ -24,14 +28,15 @@ public class PlayerController : MonoBehaviour
     public bool isRunning = false;
 
     private Vector3 saveDirection;
-
     private Vector3 downDirection;
+    private Vector3 platformForward;
 
     private Vector3 follow = Vector3.zero;
 
     void Start()
     {
         rb = GetComponent<Rigidbody>();
+        platformForward = Vector3.forward;
     }
 
     public void disableCursor()
@@ -49,10 +54,22 @@ public class PlayerController : MonoBehaviour
         transform.rotation *= Quaternion.Euler(0, Input.GetAxis("Mouse X") * lookSpeed, 0);
 
         isRunning = Input.GetKey(KeyCode.LeftShift);
-        float curSpeedX = canMove ? (isRunning ? runningSpeed : walkSpeed) * Input.GetAxis("Vertical") : 0;
-        float curSpeedY = canMove ? (isRunning ? runningSpeed : walkSpeed) * Input.GetAxis("Horizontal") : 0;
+        if (currentSpeed < minSpeed)
+        {
+            currentSpeed += 0.0005f;
+        }
 
-        moveDirection = (transform.forward * curSpeedX * Time.deltaTime) + (transform.right * curSpeedY * Time.deltaTime);
+        if (Input.GetAxis("Vertical") > 0 && currentSpeed < maxSpeed)
+        {
+            currentSpeed += 0.01f;
+        } else if (Input.GetAxis("Vertical") < 0 && currentSpeed > minSpeed) {
+            currentSpeed -= 0.01f;
+        }
+
+        float curSpeedX = canMove ? (currentSpeed + modifier) : 0;
+        float curSpeedY = canMove ? speed * Input.GetAxis("Horizontal") : 0;
+
+        moveDirection = (platformForward * curSpeedX * Time.deltaTime) + (transform.right * curSpeedY * Time.deltaTime);
 
         if (isRunning && !runningParticles.isPlaying && Input.GetKey(KeyCode.W))
         {
@@ -162,15 +179,20 @@ public class PlayerController : MonoBehaviour
                 case PlatformManager.PlatformType.RotateZ:
                     break;
                 case PlatformManager.PlatformType.SpeedUp:
-                    rb.AddForce(other.transform.forward * platform.speed * Time.deltaTime, ForceMode.Impulse);
+                    modifier += platform.speed;
                     break;
                 case PlatformManager.PlatformType.SpeedDown:
-                    rb.AddForce(-other.transform.forward * platform.speed * Time.deltaTime, ForceMode.Impulse);
+                    if (modifier - platform.speed >= 0) {
+                        modifier -= platform.speed;
+                    } else {
+                        modifier = 0.0f;    
+                    }
                     break;
                 default:
                     gDirection = -transform.up;
                     break;
             }
+            platformForward = other.transform.forward;  
             this.downDirection = gDirection;
             Physics.gravity = gDirection * 9.81f;
         }
