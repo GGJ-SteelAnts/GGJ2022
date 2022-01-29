@@ -188,11 +188,12 @@ public class PlayerController : MonoBehaviour
             }
         }
         var distanceFromYAxis = new Vector2(rb.position.x, rb.position.y).magnitude;
-        if (distanceFromYAxis > maxDistanceFromCenterLine)
+        if (distanceFromYAxis > this.maxDistanceFromCenterLine)
         {
             Debug.Log("Player fell out of map.");
             rb.velocity = Vector3.zero;
             Physics.gravity = -Vector3.up * 9.81f;
+            UiController.SaveGame();
             UnityEngine.SceneManagement.SceneManager.LoadScene(0);
         }
     }

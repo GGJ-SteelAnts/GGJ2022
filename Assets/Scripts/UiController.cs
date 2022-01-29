@@ -8,8 +8,10 @@ public class UiController : MonoBehaviour
     public GameObject player = null;
     private float startPosition;
     public TextMeshProUGUI uiDistance;
-    public int highScore;
-    public float distance = 0.0f;
+    public TextMeshProUGUI uiHighScore;
+
+    public static float distance = 0;
+    public static int highScore = 0;
     private float oldDistance = 0.0f;
 
     // Start is called before the first frame update
@@ -19,24 +21,24 @@ public class UiController : MonoBehaviour
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
 
-        this.LoadGame();
+        UiController.LoadGame();
     }
-    void SaveGame()
+    public static void SaveGame()
     {
-        PlayerPrefs.SetInt("HighestScore", this.highScore);
+        PlayerPrefs.SetInt("HighestScore", (int)UiController.distance);
         PlayerPrefs.Save();
         Debug.Log("Game data saved!");
     }
-    void LoadGame()
+    static void LoadGame()
     {
         if (PlayerPrefs.HasKey("HighestScore"))
         {
-            this.highScore = PlayerPrefs.GetInt("SavedInteger");
-            Debug.Log("Game data loaded!");
+            UiController.highScore = PlayerPrefs.GetInt("HighestScore");
+            Debug.Log(UiController.highScore);
         }
         else
         {
-            this.highScore = 0;
+            UiController.highScore = 0;
         }
 
     }
@@ -44,10 +46,11 @@ public class UiController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        distance = this.player.transform.position.z - startPosition;
+        UiController.distance = this.player.transform.position.z - startPosition;
         if (oldDistance < distance)
         {
             uiDistance.text = "Distance : " + distance.ToString("0");
+            uiHighScore.text = "HighScore : " + UiController.highScore.ToString("0");
             oldDistance = distance;
         }
     }
