@@ -32,6 +32,8 @@ public class PlayerController : MonoBehaviour
     [Header("Others")]
     public ParticleSystem runningParticles;
     public Transform mainObject;
+    public AudioSource audioSource;
+    public List<AudioClip> audioClips = new List<AudioClip>();
     // Start is called before the first frame update
 
     private Vector3 saveDirection;
@@ -100,6 +102,30 @@ public class PlayerController : MonoBehaviour
         {
             jump = true;
             isGrounded = false;
+        }
+
+        if (audioSource != null && audioClips.Count > 0) {
+            if ((currentSpeed + modifier) > speed * 3f && (currentSpeed + modifier) < speed * 7f)
+            {
+                if (audioClips.Count > 1 && audioSource.clip != audioClips[1]) {
+                    audioSource.Stop();
+                    audioSource.clip = audioClips[1];
+                    audioSource.Play();
+                }
+            } else if ((currentSpeed + modifier) <= speed * 3f) {
+                if (audioSource.clip != audioClips[0]) {
+                    audioSource.Stop();
+                    audioSource.clip = audioClips[0];
+                    audioSource.Play();
+                }
+            } else if ((currentSpeed + modifier) >= speed * 7f) {
+                if (audioClips.Count > 2 && audioSource.clip != audioClips[2])
+                {
+                    audioSource.Stop();
+                    audioSource.clip = audioClips[2];
+                    audioSource.Play();
+                }
+            }
         }
 
         rb.MovePosition(rb.position + moveDirection);
