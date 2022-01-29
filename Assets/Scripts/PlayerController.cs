@@ -149,25 +149,25 @@ public class PlayerController : MonoBehaviour
             }
             if (platform.type == PlatformManager.PlatformType.Pull)
             {
-                gDirection = -transform.up;
+                gDirection = -other.GetContact(0).normal;
             }
             else if (platform.type == PlatformManager.PlatformType.Push)
             {
-                gDirection = transform.up;
+                gDirection = -other.GetContact(0).normal;
             }
             else if ((platform.type == PlatformManager.PlatformType.RotateY || platform.type == PlatformManager.PlatformType.RotateZ))
             {
-                gDirection = -transform.up;
+                gDirection = -other.GetContact(0).normal;
             }
             else if (platform.type == PlatformManager.PlatformType.SpeedUp)
             {
                 rb.AddForce(other.transform.forward * platform.speed * Time.deltaTime, ForceMode.Impulse);
-                gDirection = -transform.up;
+                gDirection = -other.GetContact(0).normal;
             }
             else if (platform.type == PlatformManager.PlatformType.SpeedDown)
             {
                 rb.AddForce(other.transform.forward * platform.speed * 10 * Time.deltaTime, ForceMode.Impulse);
-                gDirection = -transform.up;
+                gDirection = -other.GetContact(0).normal;
             }
             this.downDirection = gDirection;
 
