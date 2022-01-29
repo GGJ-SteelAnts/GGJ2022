@@ -8,9 +8,9 @@ public class UiController : MonoBehaviour
     public GameObject player = null;
     private Vector3 startPosition;
     private Vector3 playerPosition;
-
     public TextMeshProUGUI uiDistance;
     public float distance = 0.0f;
+    private float oldDistance = 0.0f;
 
     // Start is called before the first frame update
     void Start()
@@ -23,6 +23,10 @@ public class UiController : MonoBehaviour
     {
         playerPosition = this.player.transform.position;
         distance = Vector3.Distance(this.startPosition, this.playerPosition);
-        uiDistance.text = "Score : " + distance.ToString("0");
+        if (oldDistance < distance)
+        {
+            uiDistance.text = "Score : " + distance.ToString("0");
+            oldDistance = distance;
+        }
     }
 }
