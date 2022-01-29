@@ -108,14 +108,14 @@ public class PlayerController : MonoBehaviour
     {
         if (jump)
         {
-            Debug.Log("Jump");
+            // Debug.Log("Jump");
             rb.AddForce(transform.up * jumpSpeed * 100 * Time.deltaTime, ForceMode.Impulse);
             jump = false;
         }
 
-        if(rb.velocity.magnitude != 0 && rb.velocity.normalized == this.downDirection.normalized)
+        if(rb.velocity.magnitude != 0 && Vector3.Dot(rb.velocity.normalized, Physics.gravity.normalized) > 0 )
         {
-            // Debug.Log("Player is falling :)");
+            Debug.Log("Player is falling :)");
             this.isFalling = true;
         }
         else
@@ -148,7 +148,7 @@ public class PlayerController : MonoBehaviour
 
         if (pushObject != null)
         {
-            PlatformManager platform = pullObject.GetComponent<PlatformManager>();
+            PlatformManager platform = pushObject.GetComponent<PlatformManager>();
             if (platform != null)
             {
                 float step = platform.speed * Time.deltaTime * 10f;

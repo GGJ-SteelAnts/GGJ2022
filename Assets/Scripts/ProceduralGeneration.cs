@@ -34,7 +34,7 @@ public class ProceduralGeneration : MonoBehaviour
         float horizontalDistancePerPlatform = (float)Random.Range(1.0f, levelBlocks.Count); ;
 
         List<GameObject> levelBlocksSpawnTemp = new List<GameObject>();
-        Debug.Log("Building LOOP");
+        // Debug.Log("Building LOOP");
 
         int pieceCount = 10;
         float radius = (pieceCount / 2) * 2;
