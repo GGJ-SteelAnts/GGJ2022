@@ -30,6 +30,11 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody>();
+        jump = new Vector3(0.0f, 2.0f, 0.0f);
+    }
+
+    public void disableCursor()
+    {
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
     }
@@ -84,7 +89,8 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    void OnCollisionStay(Collision other){
+    void OnCollisionStay(Collision other)
+    {
         if (other.gameObject.tag != "platform") return;
         PlatformManager platform = other.gameObject.GetComponent<PlatformManager>();
         if (platform == null)
@@ -101,18 +107,19 @@ public class PlayerController : MonoBehaviour
             || other.GetContact(0).normal == -other.transform.forward
             || (
                     other.GetContact(0).normal != -other.transform.up
-                &&  other.GetContact(0).normal != other.transform.up
-                &&  other.GetContact(0).normal != -other.transform.right
-                &&  other.GetContact(0).normal != other.transform.right
+                && other.GetContact(0).normal != other.transform.up
+                && other.GetContact(0).normal != -other.transform.right
+                && other.GetContact(0).normal != other.transform.right
                 )
             )
-            {
-                return;
-            }
+        {
+            return;
+        }
+        Physics.gravity = this.downDirection * 9.81f;
         // if (platform.type == PlatformManager.PlatformType.SpeedUp)
         // {
-            angle = Mathf.Atan2(Vector3.Magnitude(axis), Vector3.Dot(-transform.up, -other.GetContact(0).normal));
-            transform.RotateAround(axis, angle);
+        angle = Mathf.Atan2(Vector3.Magnitude(axis), Vector3.Dot(-transform.up, -other.GetContact(0).normal));
+        transform.RotateAround(axis, angle);
         // }
         // TODO: Handle other PlatformTypes
         Physics.gravity = -other.GetContact(0).normal * 9.81f;
@@ -128,9 +135,9 @@ public class PlayerController : MonoBehaviour
             || other.GetContact(0).normal == -other.transform.forward
             || (
                     other.GetContact(0).normal != -other.transform.up
-                &&  other.GetContact(0).normal != other.transform.up
-                &&  other.GetContact(0).normal != -other.transform.right
-                &&  other.GetContact(0).normal != other.transform.right
+                && other.GetContact(0).normal != other.transform.up
+                && other.GetContact(0).normal != -other.transform.right
+                && other.GetContact(0).normal != other.transform.right
                 )
             )
             {
@@ -148,8 +155,9 @@ public class PlayerController : MonoBehaviour
 
             Vector3 gDirection;
             PlatformManager platform = other.gameObject.GetComponent<PlatformManager>();
-            gDirection = -other.GetContact(0).normal;
-            if (platform == null){
+            gDirection = -transform.up;
+            if (platform == null)
+            {
                 // FIXME: remove
                 this.downDirection = -transform.up;
                 return;
