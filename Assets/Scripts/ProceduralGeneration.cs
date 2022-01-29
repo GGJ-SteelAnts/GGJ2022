@@ -25,6 +25,7 @@ public class ProceduralGeneration : MonoBehaviour
 
         Vector3 nextBlockLocation = new Vector3(lastObject.transform.position.x, lastObject.transform.position.y, lastObject.transform.position.z + b.size.z + 1.0f);
 
+        return Instantiate(objToSpawn, nextBlockLocation, (Quaternion.identity));
     }
 
     List<GameObject> spawnSpiralOfPlatforms(GameObject lastObject, GameObject objToSpawn)
