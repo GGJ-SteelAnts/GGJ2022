@@ -24,6 +24,8 @@ public class PlayerController : MonoBehaviour
     private bool isGrounded = false;
     public bool isRunning = false;
 
+    private Vector3 downDirection;
+
     private Vector3 follow = Vector3.zero;
 
     void Start()
@@ -70,7 +72,7 @@ public class PlayerController : MonoBehaviour
     {
         if (other.gameObject.tag == "platform")
         {
-            Physics.gravity = -Vector3.up * 9.81f;
+            Physics.gravity = this.downDirection * 9.81f;
         }
     }
 
@@ -86,12 +88,27 @@ public class PlayerController : MonoBehaviour
         Vector3 axis;
         float angle;
         axis = Vector3.Cross(-transform.up, -other.GetContact(0).normal);
+
+        if (other.GetContact(0).normal == other.transform.forward
+            || other.GetContact(0).normal == -other.transform.forward
+            || (
+                    other.GetContact(0).normal != -other.transform.up
+                &&  other.GetContact(0).normal != other.transform.up
+                &&  other.GetContact(0).normal != -other.transform.right
+                &&  other.GetContact(0).normal != other.transform.right
+                )
+            )
+            {
+                return;
+            }
+        Physics.gravity = this.downDirection * 9.81f;
         if (platform.type == PlatformManager.PlatformType.SpeedUp)
         {
             angle = Mathf.Atan2(Vector3.Magnitude(axis), Vector3.Dot(-transform.up, -other.GetContact(0).normal));
             transform.RotateAround(axis, angle);
-            // TODO: Rotate gravity to  the center of platform
         }
+        // TODO: Handle other PlatformTypes
+        Physics.gravity = this.downDirection * 9.81f;
 
     }
 
@@ -100,6 +117,18 @@ public class PlayerController : MonoBehaviour
         isGrounded = true;
         if (other.gameObject.tag == "platform")
         {
+            if (other.GetContact(0).normal == other.transform.forward
+            || other.GetContact(0).normal == -other.transform.forward
+            || (
+                    other.GetContact(0).normal != -other.transform.up
+                &&  other.GetContact(0).normal != other.transform.up
+                &&  other.GetContact(0).normal != -other.transform.right
+                &&  other.GetContact(0).normal != other.transform.right
+                )
+            )
+            {
+                return;
+            }
             Vector3 axis;
             float angle;
 
@@ -114,6 +143,8 @@ public class PlayerController : MonoBehaviour
             PlatformManager platform = other.gameObject.GetComponent<PlatformManager>();
             gDirection = -transform.up;
             if (platform == null){
+                // FIXME: remove
+                this.downDirection = -transform.up;
                 return;
             }
             if (platform.type == PlatformManager.PlatformType.Pull)
@@ -138,6 +169,7 @@ public class PlayerController : MonoBehaviour
                 rb.AddForce(other.transform.forward * platform.speed * 10 * Time.deltaTime, ForceMode.Impulse);
                 gDirection = -transform.up;
             }
+            this.downDirection = gDirection;
 
             Physics.gravity = gDirection * 9.81f;
         }
