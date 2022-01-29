@@ -172,10 +172,7 @@ MonoBehaviour:
   - {fileID: 8768991388683709947, guid: 32d2ba4971e4c7e4ab98a1f9c37dcffc, type: 3}
   - {fileID: 8768991388683709947, guid: 99c4e582c7358f346ab00dae4ae956f9, type: 3}
   - {fileID: 6650340373999088090, guid: 76b3e3235b07ca04f91c9b020603e1dd, type: 3}
-  - {fileID: 8768991388683709947, guid: 1e3f34788e0cb3f49a0bef285d5b059a, type: 3}
-  lastBlockSpawnPoint: {x: 0, y: 0, z: 0}
-  lastBlock: {fileID: 708734972}
-  lastBlockPrefab: {fileID: 708734972}
+  player: {fileID: 1621231496}
 --- !u!1 &705507993
 GameObject:
   m_ObjectHideFlags: 0
@@ -367,6 +364,11 @@ Transform:
   m_Father: {fileID: 327689121}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1621231496 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3244356566819001084, guid: ec622cf6f0988bc42a99ba84304c15a9, type: 3}
+  m_PrefabInstance: {fileID: 1953646381}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1802677907
 GameObject:
   m_ObjectHideFlags: 0
@@ -423,6 +425,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 3244356566819001073, guid: ec622cf6f0988bc42a99ba84304c15a9, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3244356566819001085, guid: ec622cf6f0988bc42a99ba84304c15a9, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -2.9
+      objectReference: {fileID: 0}
     - target: {fileID: 3244356567786994344, guid: ec622cf6f0988bc42a99ba84304c15a9, type: 3}
       propertyPath: m_Name
       value: Player
