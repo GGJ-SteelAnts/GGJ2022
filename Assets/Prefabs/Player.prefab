@@ -1478,7 +1478,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b108dca155b156640a1beb1eeaa1995d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxDistanceFromCenterLine: 0
+  maxDistanceFromCenterLine: 30
   speed: 7.5
   maxSpeed: 15
   minSpeed: 5
@@ -1724,6 +1724,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   player: {fileID: 3244356566819001084}
   uiDistance: {fileID: 3244356567871325870}
+  highScore: 0
   distance: 0
 --- !u!1 &3244356567786994344
 GameObject:
