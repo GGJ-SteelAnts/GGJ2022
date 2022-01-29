@@ -168,29 +168,33 @@ public class PlayerController : MonoBehaviour
             Vector3 gDirection;
             PlatformManager platform = other.gameObject.GetComponent<PlatformManager>();
             gDirection = -other.GetContact(0).normal;
-            switch (platform.type)
-            {
-                case PlatformManager.PlatformType.Push:
-                    break;
-                case PlatformManager.PlatformType.Pull:
-                    break;
-                case PlatformManager.PlatformType.RotateY:
-                    break;
-                case PlatformManager.PlatformType.RotateZ:
-                    break;
-                case PlatformManager.PlatformType.SpeedUp:
-                    modifier += platform.speed;
-                    break;
-                case PlatformManager.PlatformType.SpeedDown:
-                    if (modifier - platform.speed >= 0) {
-                        modifier -= platform.speed;
-                    } else {
-                        modifier = 0.0f;    
-                    }
-                    break;
-                default:
-                    gDirection = -transform.up;
-                    break;
+            if (platform != null) {
+                switch (platform.type)
+                {
+                    case PlatformManager.PlatformType.Push:
+                        break;
+                    case PlatformManager.PlatformType.Pull:
+                        break;
+                    case PlatformManager.PlatformType.RotateY:
+                        break;
+                    case PlatformManager.PlatformType.RotateZ:
+                        break;
+                    case PlatformManager.PlatformType.SpeedUp:
+                        modifier += platform.speed;
+                        break;
+                    case PlatformManager.PlatformType.SpeedDown:
+                        if (modifier - platform.speed >= 0) {
+                            modifier -= platform.speed;
+                        } else {
+                            modifier = 0.0f;
+                        }
+                        break;
+                    default:
+                        gDirection = -transform.up;
+                        break;
+                }
+            } else {
+                gDirection = -transform.up;
             }
             platformForward = other.transform.forward;  
             this.downDirection = gDirection;
