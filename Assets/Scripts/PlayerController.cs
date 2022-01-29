@@ -165,7 +165,7 @@ public class PlayerController : MonoBehaviour
                     rb.AddForce(other.transform.forward * platform.speed * Time.deltaTime, ForceMode.Impulse);
                     break;
                 case PlatformManager.PlatformType.SpeedDown:
-                    rb.AddForce(other.transform.forward * platform.speed * 10 * Time.deltaTime, ForceMode.Impulse);
+                    rb.AddForce(-other.transform.forward * platform.speed * Time.deltaTime, ForceMode.Impulse);
                     break;
                 default:
                     gDirection = -transform.up;
