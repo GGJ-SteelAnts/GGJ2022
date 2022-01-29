@@ -82,7 +82,7 @@ public class PlayerController : MonoBehaviour
         }
 
         float curSpeedX = canMove ? (currentSpeed + modifier) : 0;
-        float curSpeedY = canMove ? (currentSpeed + modifier) * Input.GetAxis("Horizontal") : 0;
+        float curSpeedY = canMove ? (currentSpeed + 3.5f + modifier) * Input.GetAxis("Horizontal") : 0;
 
         moveDirection = (platformForward * curSpeedX * Time.deltaTime) + (transform.right * curSpeedY * Time.deltaTime);
 
