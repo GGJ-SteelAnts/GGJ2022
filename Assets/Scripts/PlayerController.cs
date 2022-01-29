@@ -21,6 +21,7 @@ public class PlayerController : MonoBehaviour
     public Vector3 jump;
     public float jumpForce = 2.0f;
     private bool isGoundet = false;
+    public bool isRunning = false;
 
     void Start()
     {
@@ -38,22 +39,22 @@ public class PlayerController : MonoBehaviour
         playerCamera.transform.localRotation = Quaternion.Euler(rotationX, 0, 0);
         transform.rotation *= Quaternion.Euler(0, Input.GetAxis("Mouse X") * lookSpeed, 0);
 
-        bool isRunning = Input.GetKey(KeyCode.LeftShift);
+        isRunning = Input.GetKey(KeyCode.LeftShift);
         float curSpeedX = canMove ? (isRunning ? runningSpeed : walkSpeed) * Input.GetAxis("Vertical") : 0;
         float curSpeedY = canMove ? (isRunning ? runningSpeed : walkSpeed) * Input.GetAxis("Horizontal") : 0;
 
         moveDirection = (transform.forward * curSpeedX * Time.deltaTime) + (transform.right * curSpeedY * Time.deltaTime);
 
-        if (isRunning && !runningParticles.isPlaying)
+        if (isRunning && !runningParticles.isPlaying && Input.GetKey(KeyCode.W))
         {
-            runningParticles.Play();
+            runningParticles.Play(true);
         }
-        else if (!isRunning && runningParticles.isPlaying)
+        else if ((!isRunning && runningParticles.isPlaying) || !Input.GetKey(KeyCode.W))
         {
-            runningParticles.Stop();
+            runningParticles.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
         }
 
-        if (Input.GetKeyUp(KeyCode.Space) && isGoundet)
+        if (Input.GetKeyDown(KeyCode.Space) && isGoundet)
         {
             Debug.Log("Jump");
             rb.AddForce(transform.up * jumpSpeed * 500 * Time.deltaTime, ForceMode.Impulse);
