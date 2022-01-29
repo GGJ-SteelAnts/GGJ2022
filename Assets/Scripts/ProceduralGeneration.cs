@@ -30,7 +30,7 @@ public class ProceduralGeneration : MonoBehaviour
         int pieceCount = 10;
         float radius = (pieceCount / 2) * 2;
         float angle = 360f / (float)pieceCount;
-        Vector3 centerPoint = new Vector3(lastObject.transform.position.x, (lastObject.transform.position.y + radius), lastObject.transform.position.z + 2.0f);
+        Vector3 centerPoint = new Vector3(lastObject.transform.position.x, (lastObject.transform.position.y + radius), lastObject.transform.position.z + 3.0f);
 
         float heightOffset = radius;
 
@@ -49,28 +49,30 @@ public class ProceduralGeneration : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        int maxNumberOfBlock = 100;
+        int maxNumberOfBlock = 200;
 
         Vector3 playerPosition = this.player.transform.position;
-        float distance = Vector3.Distance(this.spawnedLevelBlocks[0].transform.position, playerPosition);
 
         Debug.Log("Index" + 0);
 
-        if (distance > 10.0f || this.spawnedLevelBlocks.Count >= maxNumberOfBlock + 5)
+        for (var i = 0; i < this.spawnedLevelBlocks.Count; i++)
         {
-            Destroy(this.spawnedLevelBlocks[0]);
-            this.spawnedLevelBlocks.Remove(this.spawnedLevelBlocks[0]);
-            spavnetobjectIndex++;
+            float distance = Vector3.Distance(this.spawnedLevelBlocks[i].transform.position, playerPosition);
+            if (distance > 10.0f && this.spawnedLevelBlocks.Count >= maxNumberOfBlock)
+            {
+                Destroy(this.spawnedLevelBlocks[i]);
+                this.spawnedLevelBlocks.Remove(this.spawnedLevelBlocks[i]);
+                spavnetobjectIndex++;
+            }
+            else
+            {
+                break;
+            }
         }
+
 
         if (this.spawnedLevelBlocks.Count <= maxNumberOfBlock)
         {
-            MeshFilter meshfilter = lastBlock.GetComponent<MeshFilter>();
-            Bounds bounds = meshfilter.mesh.bounds;
-
-            float scale = meshfilter.transform.localScale.x;
-            Bounds b = new Bounds(bounds.center * scale, bounds.size * scale);
-
             int blockToSpawn = Random.Range(0, levelBlocks.Count - 1);
 
             GameObject instantiatedGameObject;
@@ -100,9 +102,17 @@ public class ProceduralGeneration : MonoBehaviour
 
             if ((blockToSpawn > -1 && (blockToSpawn < (levelBlocks.Count - 1))))
             {
+                MeshFilter meshfilter = this.lastBlock.GetComponent<MeshFilter>();
+                Bounds bounds = meshfilter.mesh.bounds;
+
+                float scale = meshfilter.transform.localScale.x;
+                Bounds b = new Bounds(bounds.center * scale, bounds.size * scale);
+
                 blockObjToSpawn = levelBlocks[blockToSpawn];
-                instantiatedGameObject = Instantiate(blockObjToSpawn, new Vector3(lastBlock.transform.position.x, lastBlock.transform.position.y, lastBlock.transform.position.y + (b.size.z + 1.0f)), (Quaternion.identity));
+                Vector3 nextBlockLocation = new Vector3(this.lastBlock.transform.position.x, this.lastBlock.transform.position.y, this.lastBlock.transform.position.z + b.size.z + 1.0f);
+                instantiatedGameObject = Instantiate(blockObjToSpawn, nextBlockLocation, (Quaternion.identity));
                 this.spawnedLevelBlocks.Add(instantiatedGameObject);
+
             }
             else
             {
@@ -116,9 +126,9 @@ public class ProceduralGeneration : MonoBehaviour
             }
 
             Debug.Log("Spawn" + blockToSpawn);
+            this.lastBlock = instantiatedGameObject;
+            this.lastBlockPrefab = blockObjToSpawn;
 
-            lastBlock = instantiatedGameObject;
-            lastBlockPrefab = blockObjToSpawn;
         }
     }
 }
