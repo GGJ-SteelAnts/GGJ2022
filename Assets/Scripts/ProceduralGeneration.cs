@@ -24,7 +24,7 @@ public class ProceduralGeneration : MonoBehaviour
     List<GameObject> drawLoop(GameObject lastObject, GameObject objToSpawn)
     {
         // configuration:
-        float heightOffset = 5f;
+        float heightOffset = 10f;
         float horizontalDistancePerPlatform = 60;
         //
 
