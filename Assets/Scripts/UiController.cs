@@ -19,7 +19,7 @@ public class UiController : MonoBehaviour
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
 
-        this.LoadSave();
+        this.LoadGame();
     }
     void SaveGame()
     {
