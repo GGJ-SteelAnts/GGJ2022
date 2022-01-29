@@ -74,6 +74,7 @@ public class ProceduralGeneration : MonoBehaviour
     void Update()
     {
         Vector3 playerPosition = this.player.transform.position;
+        PlayerController playerControlsSript = this.player.GetComponent<PlayerController>();
 
         for (var i = 0; i < this.spawnedLevelBlocks.Count; i++)
         {
@@ -97,12 +98,15 @@ public class ProceduralGeneration : MonoBehaviour
 
             int blockToSpawn = Random.Range(0, (levelBlocks.Count + 1));
 
-            if (blockToSpawn > 31 && (blockToSpawn < levelBlocks.Count) && levelBlocks[blockToSpawn].name == lastBlockPrefab.name)
+            if (playerControlsSript.isFalling == false) ;
             {
-                Debug.Log("Same Block");
-                if (blockToSpawn > levelBlocks.Count || blockToSpawn < 0)
+                if (blockToSpawn > 31 && (blockToSpawn < levelBlocks.Count) && levelBlocks[blockToSpawn].name == lastBlockPrefab.name)
                 {
-                    blockToSpawn = Random.Range(0, levelBlocks.Count);
+                    Debug.Log("Same Block");
+                    if (blockToSpawn > levelBlocks.Count || blockToSpawn < 0)
+                    {
+                        blockToSpawn = Random.Range(0, levelBlocks.Count);
+                    }
                 }
             }
 

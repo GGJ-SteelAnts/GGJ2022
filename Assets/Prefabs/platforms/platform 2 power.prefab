@@ -95,6 +95,7 @@ GameObject:
   - component: {fileID: 7164401439626984364}
   - component: {fileID: 5928557084490550214}
   - component: {fileID: 6189155224637060765}
+  - component: {fileID: -443919199017515566}
   m_Layer: 0
   m_Name: platform 2 power
   m_TagString: Untagged
@@ -181,3 +182,17 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 3.3, y: 0.5, z: 5}
   m_Center: {x: 0, y: 0.25, z: 0}
+--- !u!114 &-443919199017515566
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7678802340880963262}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fdc803964e5f2b042bece1765b69164f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  type: 0
+  speed: 5
