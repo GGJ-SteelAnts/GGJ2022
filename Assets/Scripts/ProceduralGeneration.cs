@@ -19,7 +19,7 @@ public class ProceduralGeneration : MonoBehaviour
         this.spawnedLevelBlocks.Add(lastBlock);
     }
 
-    List<GameObject> drawLoop(GameObject lastObject, GameObject objToSpawn)
+    List<GameObject> spawnSpiralOfPlatforms(GameObject lastObject, GameObject objToSpawn)
     {
         // configuration:
         float horizontalDistancePerPlatform = 0.5f;
@@ -116,7 +116,7 @@ public class ProceduralGeneration : MonoBehaviour
             }
             else
             {
-                List<GameObject> instantiatedGameObjectLists = this.drawLoop(lastBlock, levelBlocks[0]);
+                List<GameObject> instantiatedGameObjectLists = this.spawnSpiralOfPlatforms(lastBlock, levelBlocks[0]);
                 foreach (var spavnedBlock in instantiatedGameObjectLists)
                 {
                     this.spawnedLevelBlocks.Add(spavnedBlock);
