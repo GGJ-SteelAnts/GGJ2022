@@ -382,6 +382,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 3244356566819001086, guid: ec622cf6f0988bc42a99ba84304c15a9, type: 3}
+      propertyPath: distanceFromYAxis
+      value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 3244356566819001086, guid: ec622cf6f0988bc42a99ba84304c15a9, type: 3}
+      propertyPath: maxDistanceFromCenterLine
+      value: 30
+      objectReference: {fileID: 0}
     - target: {fileID: 3244356567786994344, guid: ec622cf6f0988bc42a99ba84304c15a9, type: 3}
       propertyPath: m_Name
       value: Player

@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
+    public float maxDistanceFromCenterLine;
     [Header("Move")]
     public float speed = 7.5f;
     public float maxSpeed = 15.0f;
@@ -113,9 +114,9 @@ public class PlayerController : MonoBehaviour
             jump = false;
         }
 
-        if(rb.velocity.magnitude != 0 && Vector3.Dot(rb.velocity.normalized, Physics.gravity.normalized) > 0 )
+        if (rb.velocity.magnitude != 0 && Vector3.Dot(rb.velocity.normalized, Physics.gravity.normalized) > 0)
         {
-            Debug.Log("Player is falling :)");
+            // Debug.Log("Player is falling :)");
             this.isFalling = true;
         }
         else
@@ -136,7 +137,8 @@ public class PlayerController : MonoBehaviour
         if (pullObject != null)
         {
             PlatformManager platform = pullObject.GetComponent<PlatformManager>();
-            if (platform != null) {
+            if (platform != null)
+            {
                 float step = platform.speed * Time.deltaTime * 10f;
                 rb.AddForce((pullObject.transform.position - transform.position) * step, ForceMode.Force);
             }
@@ -158,6 +160,15 @@ public class PlayerController : MonoBehaviour
             {
                 pushObject = null;
             }
+        }
+        var distanceFromYAxis = new Vector2(rb.position.x, rb.position.y).magnitude;
+        if (distanceFromYAxis > maxDistanceFromCenterLine)
+        {
+            Debug.Log("Player fell out of map.");
+            rb.velocity = Vector3.zero;
+            Physics.gravity = -Vector3.up * 9.81f;
+
+            UnityEngine.SceneManagement.SceneManager.LoadScene(0);
         }
     }
 
@@ -219,7 +230,8 @@ public class PlayerController : MonoBehaviour
 
             Vector3 gDirection = -other.GetContact(0).normal;
             PlatformManager platform = other.gameObject.GetComponent<PlatformManager>();
-            if (platform != null) {
+            if (platform != null)
+            {
                 switch (platform.type)
                 {
                     case PlatformManager.PlatformType.Push:
