@@ -153,7 +153,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 327689120}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: -0.4}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -177,6 +177,10 @@ MonoBehaviour:
   - {fileID: 8768991388683709947, guid: 32d2ba4971e4c7e4ab98a1f9c37dcffc, type: 3}
   - {fileID: 8768991388683709947, guid: 99c4e582c7358f346ab00dae4ae956f9, type: 3}
   - {fileID: 6650340373999088090, guid: 76b3e3235b07ca04f91c9b020603e1dd, type: 3}
+  - {fileID: 7678802340880963262, guid: c7b1510ab2ab8e349bfaafa501cecb1f, type: 3}
+  - {fileID: 8768991388683709947, guid: 97d4c453fb5affa448968cb5ce9ca2f4, type: 3}
+  - {fileID: 8768991388683709947, guid: 1e3f34788e0cb3f49a0bef285d5b059a, type: 3}
+  - {fileID: 8768991388683709947, guid: 2e18815c9b04872428df50ccfc059d03, type: 3}
   spawnedLevelBlocks: []
   player: {fileID: 250075900}
   lastBlock: {fileID: 708734972}
