@@ -23,6 +23,9 @@ public class PlayerController : MonoBehaviour
     private bool isGrounded = false;
     public bool isRunning = false;
 
+    private Vector3 saveRotation;
+    private Vector3 saveStartRotation;
+
     private Vector3 downDirection;
 
     private Vector3 follow = Vector3.zero;
@@ -84,7 +87,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    void OnCollisionStay(Collision other){
+    void OnCollisionStay(Collision other) {
         if (other.gameObject.tag != "platform") return;
         PlatformManager platform = other.gameObject.GetComponent<PlatformManager>();
         if (platform == null)
@@ -101,18 +104,19 @@ public class PlayerController : MonoBehaviour
             || other.GetContact(0).normal == -other.transform.forward
             || (
                     other.GetContact(0).normal != -other.transform.up
-                &&  other.GetContact(0).normal != other.transform.up
-                &&  other.GetContact(0).normal != -other.transform.right
-                &&  other.GetContact(0).normal != other.transform.right
+                && other.GetContact(0).normal != other.transform.up
+                && other.GetContact(0).normal != -other.transform.right
+                && other.GetContact(0).normal != other.transform.right
                 )
             )
-            {
-                return;
-            }
+        {
+            return;
+        }
         // if (platform.type == PlatformManager.PlatformType.SpeedUp)
         // {
             angle = Mathf.Atan2(Vector3.Magnitude(axis), Vector3.Dot(-transform.up, -other.GetContact(0).normal));
-            transform.RotateAround(axis, angle);
+            transform.Rotate(axis * angle * 100.0f * Time.deltaTime);
+            //transform.RotateAround(axis, angle);
         // }
         // TODO: Handle other PlatformTypes
         Physics.gravity = -other.GetContact(0).normal * 9.81f;
@@ -124,6 +128,7 @@ public class PlayerController : MonoBehaviour
         isGrounded = true;
         if (other.gameObject.tag == "platform")
         {
+
             if (other.GetContact(0).normal == other.transform.forward
             || other.GetContact(0).normal == -other.transform.forward
             || (
@@ -143,7 +148,8 @@ public class PlayerController : MonoBehaviour
             if (axis != Vector3.zero)
             {
                 angle = Mathf.Atan2(Vector3.Magnitude(axis), Vector3.Dot(-transform.up, -other.GetContact(0).normal));
-                transform.RotateAround(axis, angle);
+                transform.Rotate(axis * angle * 100.0f * Time.deltaTime);
+                //transform.RotateAround(axis, angle);
             }
 
             Vector3 gDirection;
