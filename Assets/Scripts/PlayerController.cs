@@ -142,7 +142,7 @@ public class PlayerController : MonoBehaviour
                 float step = platform.speed * Time.deltaTime * 10f;
                 rb.AddForce((pullObject.transform.position - transform.position) * step, ForceMode.Force);
             }
-            if (Vector3.Distance(pullObject.transform.position, transform.position) > 10f)
+            if (Vector3.Distance(pullObject.transform.position, transform.position) > 5f)
             {
                 pullObject = null;
             }
@@ -156,7 +156,7 @@ public class PlayerController : MonoBehaviour
                 float step = platform.speed * Time.deltaTime * 10f;
                 rb.AddForce(-(pushObject.transform.position - transform.position) * step, ForceMode.Force);
             }
-            if (Vector3.Distance(pushObject.transform.position, transform.position) > 10f)
+            if (Vector3.Distance(pushObject.transform.position, transform.position) > 5f)
             {
                 pushObject = null;
             }
