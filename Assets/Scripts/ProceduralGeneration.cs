@@ -31,7 +31,7 @@ public class ProceduralGeneration : MonoBehaviour
     List<GameObject> spawnSpiralOfPlatforms(GameObject lastObject, GameObject objToSpawn)
     {
         // configuration:
-        float horizontalDistancePerPlatform = 0.5f;
+        float horizontalDistancePerPlatform = (float)Random.Range(1.0f, levelBlocks.Count); ;
 
         List<GameObject> levelBlocksSpawnTemp = new List<GameObject>();
         Debug.Log("Building LOOP");
@@ -46,13 +46,13 @@ public class ProceduralGeneration : MonoBehaviour
         float scale = meshfilter.transform.localScale.x;
         Bounds b = new Bounds(bounds.center * scale, bounds.size * scale);
 
-        Vector3 centerPoint = new Vector3(lastObject.transform.position.x, (lastObject.transform.position.y + radius), this.lastBlock.transform.position.z + b.size.z + 1.0f);
+        Vector3 centerPoint = new Vector3(lastObject.transform.position.x, (lastObject.transform.position.y + radius), lastObject.transform.position.z + b.size.z + 1.0f);
 
         float heightOffset = radius;
 
-        for (int i = 1; i < pieceCount + 2; i++)
+        for (int i = 1; i < pieceCount + 1; i++)
         {
-            Quaternion rotation = (Quaternion.AngleAxis((i - 1) * angle, Vector3.back));
+            Quaternion rotation = (Quaternion.AngleAxis(i * angle, Vector3.back));
             Vector3 direction = rotation * Vector3.down;
             Vector3 position = (lastObject.transform.position + (direction * radius));
 
@@ -90,29 +90,27 @@ public class ProceduralGeneration : MonoBehaviour
             }
         }
 
-
         if (this.spawnedLevelBlocks.Count <= this.maximumNumberOfPlatformsAtScene)
         {
-            int blockToSpawn = Random.Range(0, levelBlocks.Count);
-
             GameObject instantiatedGameObject;
             GameObject blockObjToSpawn;
 
-            blockObjToSpawn = levelBlocks[blockToSpawn];
-            if (blockObjToSpawn.name == lastBlockPrefab.name)
+            int blockToSpawn = Random.Range(0, (levelBlocks.Count + 1));
+
+            if (blockToSpawn > 31 && (blockToSpawn < levelBlocks.Count) && levelBlocks[blockToSpawn].name == lastBlockPrefab.name)
             {
                 Debug.Log("Same Block");
-                if (blockToSpawn < levelBlocks.Count || blockToSpawn > -1)
+                if (blockToSpawn > levelBlocks.Count || blockToSpawn < 0)
                 {
-                    blockToSpawn = Random.Range(0, (levelBlocks.Count - 1));
+                    blockToSpawn = Random.Range(0, levelBlocks.Count);
                 }
             }
 
-            if ((blockToSpawn > -1 && (blockToSpawn < (levelBlocks.Count - 1))))
+            if (blockToSpawn > -1 && (blockToSpawn < levelBlocks.Count))
             {
+                blockObjToSpawn = levelBlocks[blockToSpawn];
                 instantiatedGameObject = this.drawPlatform(this.lastBlock, this.levelBlocks[blockToSpawn]);
                 this.spawnedLevelBlocks.Add(instantiatedGameObject);
-
             }
             else
             {
