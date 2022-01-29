@@ -9,7 +9,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2957714535164430066}
-  - component: {fileID: -2509422500240301154}
   - component: {fileID: -4978173286257615179}
   m_Layer: 0
   m_Name: level chunk 2
@@ -39,14 +38,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!33 &-2509422500240301154
-MeshFilter:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1316835597118596560}
-  m_Mesh: {fileID: 0}
 --- !u!114 &-4978173286257615179
 MonoBehaviour:
   m_ObjectHideFlags: 0
