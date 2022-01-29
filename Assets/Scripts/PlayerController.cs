@@ -12,7 +12,7 @@ public class PlayerController : MonoBehaviour
     public float currentSpeed = 0f;
     private float modifier = 0.0f;
     Vector3 moveDirection = Vector3.zero;
-    bool canMove = true;
+    bool canMove = false;
     Rigidbody rb;
     float moveDirectionY;
     public bool isRunning = false;
@@ -58,13 +58,15 @@ public class PlayerController : MonoBehaviour
         transform.rotation *= Quaternion.Euler(0, Input.GetAxis("Mouse X") * lookSpeed, 0);
 
         isRunning = Input.GetKey(KeyCode.LeftShift);
-        if (currentSpeed < minSpeed)
+        if (canMove && currentSpeed < minSpeed)
         {
             currentSpeed += 0.0005f;
         }
 
-        if (Input.GetAxis("Vertical") > 0 && currentSpeed < maxSpeed)
-        {
+        if (Input.GetAxis("Vertical") > 0 && currentSpeed < maxSpeed) {
+            if (!canMove) {
+                canMove = true;
+            }
             currentSpeed += 0.01f;
         } else if (Input.GetAxis("Vertical") < 0 && currentSpeed > minSpeed) {
             currentSpeed -= 0.01f;
