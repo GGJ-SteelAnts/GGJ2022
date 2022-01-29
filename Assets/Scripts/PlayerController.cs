@@ -178,10 +178,10 @@ public class PlayerController : MonoBehaviour
                 switch (platform.type)
                 {
                     case PlatformManager.PlatformType.Push:
-                        rb.AddExplosionForce(platform.speed * Time.deltaTime * 10, other.gameObject.transform.position, 10);
+                        rb.AddForce(other.GetContact(0).normal * platform.speed * Time.deltaTime, ForceMode.Impulse);
                         break;
                     case PlatformManager.PlatformType.Pull:
-                        rb.AddExplosionForce(-platform.speed * Time.deltaTime * 10, other.gameObject.transform.position, 10);
+                        rb.AddForce(-other.GetContact(0).normal * platform.speed * Time.deltaTime, ForceMode.Impulse);
                         break;
                     case PlatformManager.PlatformType.RotateY:
                         break;
@@ -198,11 +198,11 @@ public class PlayerController : MonoBehaviour
                         }
                         break;
                     default:
-                        gDirection = -transform.up;
+                        gDirection = -other.GetContact(0).normal;
                         break;
                 }
             } else {
-                gDirection = -transform.up;
+                gDirection = -other.GetContact(0).normal;
             }
             platformForward = other.transform.forward;  
             this.downDirection = gDirection;
