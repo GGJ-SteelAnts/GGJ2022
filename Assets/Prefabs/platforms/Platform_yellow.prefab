@@ -113,6 +113,7 @@ GameObject:
   - component: {fileID: 8768991388683709950}
   - component: {fileID: 7821003709828495146}
   - component: {fileID: 4344779564172896453}
+  - component: {fileID: 5433657018731068073}
   m_Layer: 0
   m_Name: Platform_yellow
   m_TagString: platform
@@ -213,3 +214,15 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 3.4, y: 0.5, z: 5}
   m_Center: {x: 0, y: 0.25, z: 0}
+--- !u!114 &5433657018731068073
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8768991388683709947}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 61dae18984b7ff147ab1d77fb817687a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

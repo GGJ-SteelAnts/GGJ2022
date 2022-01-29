@@ -12,26 +12,43 @@ public class ProceduralGeneration : MonoBehaviour
     private int spavnetobjectIndex = 0;
     private int maximumNumberOfPlatformsAtScene = 100;
     private float maximumDistanceOfPlatformFromPlayer = 20.0f;
+    private GameObject levelParrent = null;
 
 
-
-    GameObject drawPlatform(GameObject lastObject, GameObject objToSpawn)
+    Bounds getPrefabBounds(GameObject go)
     {
-        MeshFilter meshfilter = lastObject.GetComponent<MeshFilter>();
-        Bounds bounds = meshfilter.mesh.bounds;
+        Renderer[] renderers = go.GetComponentsInChildren<Renderer>();
 
-        float scale = meshfilter.transform.localScale.x;
-        Bounds b = new Bounds(bounds.center * scale, bounds.size * scale);
+        if (renderers.Length > 0)
+        {
+            Bounds bounds = renderers[0].bounds;
+            for (int i = 1, ni = renderers.Length; i < ni; i++)
+            {
+                bounds.Encapsulate(renderers[i].bounds);
+            }
+            return bounds;
+        }
+        else
+        {
+            return new Bounds();
+        }
+    }
+    GameObject drawPlatform(GameObject lastObject, GameObject objToSpawn, GameObject parentLevelObject)
+    {
+        Bounds bounds = this.getPrefabBounds(lastObject);
+        Bounds b = new Bounds(bounds.center, bounds.size);
 
         Vector3 nextBlockLocation = new Vector3(lastObject.transform.position.x, lastObject.transform.position.y, lastObject.transform.position.z + b.size.z + 1.0f);
 
-        return Instantiate(objToSpawn, nextBlockLocation, (Quaternion.identity));
+        GameObject newObject = Instantiate(objToSpawn, nextBlockLocation, (Quaternion.identity));
+        newObject.transform.parent = parentLevelObject.transform;
+        return newObject;
     }
 
-    List<GameObject> spawnSpiralOfPlatforms(GameObject lastObject, GameObject objToSpawn)
+    List<GameObject> spawnSpiralOfPlatforms(GameObject lastObject, GameObject objToSpawn, GameObject parentLevelObject)
     {
         // configuration:
-        float horizontalDistancePerPlatform = (float)Random.Range(1.0f, levelBlocks.Count); ;
+        float horizontalDistancePerPlatform = (float)Random.Range(0.5f, 2.0f); ;
 
         List<GameObject> levelBlocksSpawnTemp = new List<GameObject>();
         // Debug.Log("Building LOOP");
@@ -40,11 +57,8 @@ public class ProceduralGeneration : MonoBehaviour
         float radius = (pieceCount / 2) * 2;
         float angle = 360f / (float)pieceCount;
 
-        MeshFilter meshfilter = lastObject.GetComponent<MeshFilter>();
-        Bounds bounds = meshfilter.mesh.bounds;
-
-        float scale = meshfilter.transform.localScale.x;
-        Bounds b = new Bounds(bounds.center * scale, bounds.size * scale);
+        Bounds bounds = this.getPrefabBounds(lastObject);
+        Bounds b = new Bounds(bounds.center, bounds.size);
 
         Vector3 centerPoint = new Vector3(lastObject.transform.position.x, (lastObject.transform.position.y + radius), lastObject.transform.position.z + b.size.z + 1.0f);
 
@@ -56,7 +70,9 @@ public class ProceduralGeneration : MonoBehaviour
             Vector3 direction = rotation * Vector3.down;
             Vector3 position = (lastObject.transform.position + (direction * radius));
 
-            levelBlocksSpawnTemp.Add(Instantiate(objToSpawn, new Vector3(position.x, position.y + heightOffset, position.z + (float)(i * horizontalDistancePerPlatform)), rotation));
+            GameObject newObject = Instantiate(objToSpawn, new Vector3(position.x, position.y + heightOffset, position.z + (float)(i * horizontalDistancePerPlatform)), rotation);
+            newObject.transform.parent = parentLevelObject.transform;
+            levelBlocksSpawnTemp.Add(newObject);
         }
 
         return levelBlocksSpawnTemp;
@@ -65,9 +81,12 @@ public class ProceduralGeneration : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        levelParrent = this.gameObject;
         lastBlockPrefab = this.gameObject.transform.GetChild(0).gameObject;
         lastBlock = this.gameObject.transform.GetChild(0).gameObject;
         this.spawnedLevelBlocks.Add(lastBlock);
+
+
     }
 
     // Update is called once per frame
@@ -75,6 +94,11 @@ public class ProceduralGeneration : MonoBehaviour
     {
         Vector3 playerPosition = this.player.transform.position;
         PlayerController playerControlsSript = this.player.GetComponent<PlayerController>();
+
+        if (playerControlsSript.isFalling)
+        {
+            return;
+        }
 
         for (var i = 0; i < this.spawnedLevelBlocks.Count; i++)
         {
@@ -98,27 +122,26 @@ public class ProceduralGeneration : MonoBehaviour
 
             int blockToSpawn = Random.Range(0, (levelBlocks.Count + 1));
 
-            if (playerControlsSript.isFalling == false) ;
+
+            if (blockToSpawn > 31 && (blockToSpawn < levelBlocks.Count) && levelBlocks[blockToSpawn].name == lastBlockPrefab.name)
             {
-                if (blockToSpawn > 31 && (blockToSpawn < levelBlocks.Count) && levelBlocks[blockToSpawn].name == lastBlockPrefab.name)
+                Debug.Log("Same Block");
+                if (blockToSpawn > levelBlocks.Count || blockToSpawn < 0)
                 {
-                    Debug.Log("Same Block");
-                    if (blockToSpawn > levelBlocks.Count || blockToSpawn < 0)
-                    {
-                        blockToSpawn = Random.Range(0, levelBlocks.Count);
-                    }
+                    blockToSpawn = Random.Range(0, levelBlocks.Count);
                 }
             }
+
 
             if (blockToSpawn > -1 && (blockToSpawn < levelBlocks.Count))
             {
                 blockObjToSpawn = levelBlocks[blockToSpawn];
-                instantiatedGameObject = this.drawPlatform(this.lastBlock, this.levelBlocks[blockToSpawn]);
+                instantiatedGameObject = this.drawPlatform(this.lastBlock, this.levelBlocks[blockToSpawn], this.levelParrent);
                 this.spawnedLevelBlocks.Add(instantiatedGameObject);
             }
             else
             {
-                List<GameObject> instantiatedGameObjectLists = this.spawnSpiralOfPlatforms(lastBlock, levelBlocks[0]);
+                List<GameObject> instantiatedGameObjectLists = this.spawnSpiralOfPlatforms(lastBlock, levelBlocks[0], this.levelParrent);
                 foreach (var spavnedBlock in instantiatedGameObjectLists)
                 {
                     this.spawnedLevelBlocks.Add(spavnedBlock);
