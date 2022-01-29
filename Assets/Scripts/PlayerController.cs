@@ -75,11 +75,11 @@ public class PlayerController : MonoBehaviour
 
         moveDirection = (platformForward * curSpeedX * Time.deltaTime) + (transform.right * curSpeedY * Time.deltaTime);
 
-        if (isRunning && !runningParticles.isPlaying && Input.GetKey(KeyCode.W))
+        if ((currentSpeed + modifier) >= maxSpeed && !runningParticles.isPlaying)
         {
             runningParticles.Play(true);
         }
-        else if ((!isRunning && runningParticles.isPlaying) || !Input.GetKey(KeyCode.W))
+        else if ((currentSpeed + modifier) < maxSpeed && runningParticles.isPlaying)
         {
             runningParticles.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
         }
