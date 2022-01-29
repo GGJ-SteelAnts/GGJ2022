@@ -121,6 +121,8 @@ public class PlayerController : MonoBehaviour
         {
             return;
         }
+        this.downDirection = -other.GetContact(0).normal;
+        saveDirection = -other.GetContact(0).normal;
 
         // TODO: Handle other PlatformTypes
         Physics.gravity = -other.GetContact(0).normal * 9.81f;
