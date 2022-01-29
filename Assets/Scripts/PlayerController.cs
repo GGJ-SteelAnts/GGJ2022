@@ -102,11 +102,11 @@ public class PlayerController : MonoBehaviour
                 return;
             }
         Physics.gravity = this.downDirection * 9.81f;
-        if (platform.type == PlatformManager.PlatformType.SpeedUp)
-        {
+        // if (platform.type == PlatformManager.PlatformType.SpeedUp)
+        // {
             angle = Mathf.Atan2(Vector3.Magnitude(axis), Vector3.Dot(-transform.up, -other.GetContact(0).normal));
             transform.RotateAround(axis, angle);
-        }
+        // }
         // TODO: Handle other PlatformTypes
         Physics.gravity = this.downDirection * 9.81f;
 
