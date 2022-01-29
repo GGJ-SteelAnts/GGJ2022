@@ -8,6 +8,7 @@ public class UiController : MonoBehaviour
     public GameObject player = null;
     private float startPosition;
     public TextMeshProUGUI uiDistance;
+    public int highScore;
     public float distance = 0.0f;
     private float oldDistance = 0.0f;
 
@@ -17,6 +18,27 @@ public class UiController : MonoBehaviour
         startPosition = this.player.transform.position.z;
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
+
+        PlayerController.LoadSave();
+    }
+    static void SaveGame()
+    {
+        PlayerPrefs.SetInt(PlayerController.highScore);
+        PlayerPrefs.Save();
+        Debug.Log("Game data saved!");
+    }
+    void LoadGame()
+    {
+        if (PlayerPrefs.HasKey("HighestScore"))
+        {
+            this.highScore = PlayerPrefs.GetInt("SavedInteger");
+            Debug.Log("Game data loaded!");
+        }
+        else
+        {
+            this.highScore = 0;
+        }
+
     }
 
     // Update is called once per frame
