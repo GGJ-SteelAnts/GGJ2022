@@ -1391,7 +1391,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3244356566819001084}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 3.67}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1481,7 +1481,7 @@ MonoBehaviour:
   runningSpeed: 7.5
   jumpSpeed: 3
   lookSpeed: 7.5
-  lookXLimit: 7.5
+  lookXLimit: 8.75
   playerCamera: {fileID: 3244356567913423211}
   runningParticles: {fileID: 1608137079}
   rotationX: 0

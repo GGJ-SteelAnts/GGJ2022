@@ -8,7 +8,7 @@ public class PlayerController : MonoBehaviour
     public float runningSpeed = 7.5f;
     public float jumpSpeed = 7.5f;
     public float lookSpeed = 7.5f;
-    public float lookXLimit = 7.5f;
+    public float lookXLimit = 40.0f;
     public Camera playerCamera;
     public ParticleSystem runningParticles;
     Vector3 moveDirection = Vector3.zero;
