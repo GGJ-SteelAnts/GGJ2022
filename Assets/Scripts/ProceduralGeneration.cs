@@ -7,10 +7,8 @@ public class ProceduralGeneration : MonoBehaviour
     public List<GameObject> levelBlocks = new List<GameObject>();
     public List<GameObject> spawnedLevelBlocks = new List<GameObject>();
     public GameObject player = null;
-    private Vector3 lastBlockSpawnPoint;
     public GameObject lastBlock;
     private GameObject lastBlockPrefab;
-    private int blockIndex = 0;
     private int spavnetobjectIndex = 0;
 
     // Start is called before the first frame update
@@ -18,7 +16,6 @@ public class ProceduralGeneration : MonoBehaviour
     {
         lastBlockPrefab = this.gameObject.transform.GetChild(0).gameObject;
         lastBlock = this.gameObject.transform.GetChild(0).gameObject;
-        lastBlockSpawnPoint = this.gameObject.transform.GetChild(0).gameObject.transform.position;
         this.spawnedLevelBlocks.Add(lastBlock);
     }
 
@@ -33,7 +30,7 @@ public class ProceduralGeneration : MonoBehaviour
         int pieceCount = 10;
         float radius = (pieceCount / 2) * 2;
         float angle = 360f / (float)pieceCount;
-        Vector3 centerPoint = new Vector3(lastObject.transform.position.x, (lastObject.transform.position.y + radius), lastObject.transform.position.z);
+        Vector3 centerPoint = new Vector3(lastObject.transform.position.x, (lastObject.transform.position.y + radius), lastObject.transform.position.z + 2.0f);
 
         float heightOffset = radius;
 
@@ -52,14 +49,14 @@ public class ProceduralGeneration : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        int maxNumberOfBlock = 20;
+        int maxNumberOfBlock = 100;
 
         Vector3 playerPosition = this.player.transform.position;
         float distance = Vector3.Distance(this.spawnedLevelBlocks[0].transform.position, playerPosition);
 
         Debug.Log("Index" + 0);
 
-        if (distance > 20.0f && this.spawnedLevelBlocks.Count > maxNumberOfBlock)
+        if (distance > 10.0f || this.spawnedLevelBlocks.Count >= maxNumberOfBlock + 5)
         {
             Destroy(this.spawnedLevelBlocks[0]);
             this.spawnedLevelBlocks.Remove(this.spawnedLevelBlocks[0]);
@@ -104,9 +101,8 @@ public class ProceduralGeneration : MonoBehaviour
             if ((blockToSpawn > -1 && (blockToSpawn < (levelBlocks.Count - 1))))
             {
                 blockObjToSpawn = levelBlocks[blockToSpawn];
-                instantiatedGameObject = Instantiate(blockObjToSpawn, new Vector3(0, 0, blockIndex * (b.size.z + 1.0f)), (Quaternion.identity));
+                instantiatedGameObject = Instantiate(blockObjToSpawn, new Vector3(lastBlock.transform.position.x, lastBlock.transform.position.y, lastBlock.transform.position.y + (b.size.z + 1.0f)), (Quaternion.identity));
                 this.spawnedLevelBlocks.Add(instantiatedGameObject);
-                blockIndex++;
             }
             else
             {
@@ -114,7 +110,6 @@ public class ProceduralGeneration : MonoBehaviour
                 foreach (var spavnedBlock in instantiatedGameObjectLists)
                 {
                     this.spawnedLevelBlocks.Add(spavnedBlock);
-                    blockIndex++;
                 }
                 instantiatedGameObject = this.spawnedLevelBlocks[this.spawnedLevelBlocks.Count - 1];
                 blockObjToSpawn = levelBlocks[0];
@@ -123,7 +118,6 @@ public class ProceduralGeneration : MonoBehaviour
             Debug.Log("Spawn" + blockToSpawn);
 
             lastBlock = instantiatedGameObject;
-            lastBlockSpawnPoint = instantiatedGameObject.transform.position;
             lastBlockPrefab = blockObjToSpawn;
         }
     }
