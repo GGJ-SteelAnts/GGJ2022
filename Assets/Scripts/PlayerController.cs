@@ -45,7 +45,7 @@ public class PlayerController : MonoBehaviour
 
         moveDirection = (transform.forward * curSpeedX * Time.deltaTime) + (transform.right * curSpeedY * Time.deltaTime);
 
-        if (Input.GetKeyDown(KeyCode.Space) && isGoundet)
+        if (Input.GetKeyUp(KeyCode.Space) && isGoundet)
         {
             Debug.Log("Jump");
             rb.AddForce(transform.up * jumpSpeed * 500 * Time.deltaTime, ForceMode.Impulse);
@@ -71,8 +71,15 @@ public class PlayerController : MonoBehaviour
                 angle = Mathf.Atan2(Vector3.Magnitude(axis), Vector3.Dot(-transform.up, -other.transform.up));
                 transform.RotateAround(axis, angle);
             }
-
-            Vector3 gDirection = new Quaternion(0.0f, 0.0f, other.gameObject.transform.rotation.z, 1.0f) * Vector3.down;
+            Vector3 gDirection;
+            PlatformManager platform = other.gameObject.GetComponent<PlatformManager>();
+            if (platform != null && platform.type == PlatformManager.PlatformType.Pull) {
+                gDirection = new Quaternion(0.0f, 0.0f, other.gameObject.transform.rotation.z, 1.0f) * Vector3.down;
+            } else if (platform != null && platform.type == PlatformManager.PlatformType.Push) {
+                gDirection = new Quaternion(0.0f, 0.0f, other.gameObject.transform.rotation.z, 1.0f) * Vector3.up;
+            } else {
+                gDirection = new Quaternion(0.0f, 0.0f, other.gameObject.transform.rotation.z, 1.0f) * Vector3.down;
+            }
 
             Physics.gravity = gDirection * 9.81f;
         }
