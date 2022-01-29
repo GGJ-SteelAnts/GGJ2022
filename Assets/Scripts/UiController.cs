@@ -6,8 +6,7 @@ using TMPro;
 public class UiController : MonoBehaviour
 {
     public GameObject player = null;
-    private Vector3 startPosition;
-    private Vector3 playerPosition;
+    private float startPosition;
     public TextMeshProUGUI uiDistance;
     public float distance = 0.0f;
     private float oldDistance = 0.0f;
@@ -15,7 +14,7 @@ public class UiController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        startPosition = this.player.transform.position;
+        startPosition = this.player.transform.position.z;
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
     }
@@ -23,8 +22,7 @@ public class UiController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        playerPosition = this.player.transform.position;
-        distance = Vector3.Distance(this.startPosition, this.playerPosition);
+        distance = this.player.transform.position.z - startPosition;
         if (oldDistance < distance)
         {
             uiDistance.text = "Distance : " + distance.ToString("0");
