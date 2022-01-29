@@ -21,7 +21,7 @@ public class PlayerController : MonoBehaviour
     float moveDirectionY;
     public Vector3 jump;
     public float jumpForce = 2.0f;
-    private bool isGoundet = false;
+    private bool isGrounded = false;
     public bool isRunning = false;
 
     private Vector3 follow = Vector3.zero;
@@ -57,19 +57,47 @@ public class PlayerController : MonoBehaviour
             runningParticles.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
         }
 
-        if (Input.GetKeyDown(KeyCode.Space) && isGoundet)
+        if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
         {
             Debug.Log("Jump");
             rb.AddForce(transform.up * jumpSpeed * 500 * Time.deltaTime, ForceMode.Impulse);
-            isGoundet = false;
+            isGrounded = false;
         }
 
         rb.MovePosition(rb.position + moveDirection);
     }
-
-    void OnCollisionStay(Collision other)
+    void OnCollisionExit(Collision other)
     {
-        isGoundet = true;
+        if (other.gameObject.tag == "platform")
+        {
+            Physics.gravity = -Vector3.up * 9.81f;
+        }
+    }
+
+    void OnCollisionStay(Collision other){
+        if (other.gameObject.tag != "platform") return;
+        PlatformManager platform = other.gameObject.GetComponent<PlatformManager>();
+        if (platform == null)
+        {
+            // FIXME: Should platforms be allowed to not to have a PlatformManager?
+            // Debug.Log("ERROR");
+            return;
+        }
+        Vector3 axis;
+        float angle;
+        axis = Vector3.Cross(-transform.up, -other.GetContact(0).normal);
+        if (platform.type == PlatformManager.PlatformType.SpeedUp)
+        {
+            angle = Mathf.Atan2(Vector3.Magnitude(axis), Vector3.Dot(-transform.up, -other.GetContact(0).normal));
+            transform.RotateAround(axis, angle);
+            // TODO: Rotate gravity to  the center of platform
+        }
+
+    }
+
+    void OnCollisionEnter(Collision other)
+    {
+        isGrounded = true;
         if (other.gameObject.tag == "platform")
         {
             Vector3 axis;
@@ -84,30 +112,35 @@ public class PlayerController : MonoBehaviour
 
             Vector3 gDirection;
             PlatformManager platform = other.gameObject.GetComponent<PlatformManager>();
-
-            if (platform != null && platform.type == PlatformManager.PlatformType.Pull)
+            gDirection = -transform.up;
+            if (platform == null){
+                return;
+            }
+            if (platform.type == PlatformManager.PlatformType.Pull)
             {
                 gDirection = -transform.up;
             }
-            else if (platform != null && platform.type == PlatformManager.PlatformType.Push)
+            else if (platform.type == PlatformManager.PlatformType.Push)
             {
                 gDirection = transform.up;
             }
-            else if (platform != null && (platform.type == PlatformManager.PlatformType.RotateY || platform.type == PlatformManager.PlatformType.RotateZ))
+            else if ((platform.type == PlatformManager.PlatformType.RotateY || platform.type == PlatformManager.PlatformType.RotateZ))
             {
                 gDirection = -transform.up;
             }
-            else if (platform != null && platform.type == PlatformManager.PlatformType.Speed)
+            else if (platform.type == PlatformManager.PlatformType.SpeedUp)
+            {
+                rb.AddForce(other.transform.forward * platform.speed * Time.deltaTime, ForceMode.Impulse);
+                gDirection = -transform.up;
+            }
+            else if (platform.type == PlatformManager.PlatformType.SpeedDown)
             {
                 rb.AddForce(other.transform.forward * platform.speed * 10 * Time.deltaTime, ForceMode.Impulse);
-                gDirection = -transform.up;
-            }
-            else
-            {
                 gDirection = -transform.up;
             }
 
             Physics.gravity = gDirection * 9.81f;
         }
     }
+
 }

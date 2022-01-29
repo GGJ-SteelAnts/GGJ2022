@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PlatformManager : MonoBehaviour
 {
-    public enum PlatformType {Pull, Push, RotateZ, RotateY, Speed};
+    public enum PlatformType {Pull, Push, RotateZ, RotateY, SpeedUp, SpeedDown};
     public PlatformType type = PlatformType.Pull;
     public float speed = 5;
 
