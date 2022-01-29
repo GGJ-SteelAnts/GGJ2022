@@ -44,11 +44,11 @@ public class PlayerController : MonoBehaviour
 
         moveDirection = (transform.forward * curSpeedX * Time.deltaTime) + (transform.right * curSpeedY * Time.deltaTime);
 
-        if (isRunning && !myParticles.isPlaying())
+        if (isRunning && !runningParticles.isPlaying())
         {
             runningParticles.Play();
         }
-        else if (!isRunning && myParticles.isPlaying())
+        else if (!isRunning && runningParticles.isPlaying())
         {
             runningParticles.Stop();
         }
