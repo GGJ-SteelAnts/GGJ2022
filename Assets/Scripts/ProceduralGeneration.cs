@@ -25,7 +25,7 @@ public class ProceduralGeneration : MonoBehaviour
     {
         // configuration:
         float heightOffset = 10f;
-        float horizontalDistancePerPlatform = 60;
+        float horizontalDistancePerPlatform = 10f;
         //
 
         List<GameObject> levelBlocksSpawnTemp = new List<GameObject>();
@@ -42,7 +42,7 @@ public class ProceduralGeneration : MonoBehaviour
             Vector3 direction = rotation * Vector3.down;
             Vector3 position = (lastObject.transform.position + (direction * radius));
 
-            levelBlocksSpawnTemp.Add(Instantiate(objToSpawn, new Vector3(position.x, position.y + heightOffset, position.z + (float)(i * heightOffset)), rotation));
+            levelBlocksSpawnTemp.Add(Instantiate(objToSpawn, new Vector3(position.x, position.y + heightOffset, position.z + (float)(i * horizontalDistancePerPlatform)), rotation));
         }
 
         return levelBlocksSpawnTemp;
