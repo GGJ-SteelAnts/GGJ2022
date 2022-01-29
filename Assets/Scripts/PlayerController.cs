@@ -101,14 +101,13 @@ public class PlayerController : MonoBehaviour
             {
                 return;
             }
-        Physics.gravity = this.downDirection * 9.81f;
         // if (platform.type == PlatformManager.PlatformType.SpeedUp)
         // {
             angle = Mathf.Atan2(Vector3.Magnitude(axis), Vector3.Dot(-transform.up, -other.GetContact(0).normal));
             transform.RotateAround(axis, angle);
         // }
         // TODO: Handle other PlatformTypes
-        Physics.gravity = this.downDirection * 9.81f;
+        Physics.gravity = -other.GetContact(0).normal * 9.81f;
 
     }
 
@@ -141,7 +140,7 @@ public class PlayerController : MonoBehaviour
 
             Vector3 gDirection;
             PlatformManager platform = other.gameObject.GetComponent<PlatformManager>();
-            gDirection = -transform.up;
+            gDirection = -other.GetContact(0).normal;
             if (platform == null){
                 // FIXME: remove
                 this.downDirection = -transform.up;
