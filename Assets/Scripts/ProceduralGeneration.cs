@@ -10,13 +10,21 @@ public class ProceduralGeneration : MonoBehaviour
     public GameObject lastBlock;
     private GameObject lastBlockPrefab;
     private int spavnetobjectIndex = 0;
+    private int maximumNumberOfPlatformsAtScene = 100;
+    private float maximumDistanceOfPlatformFromPlayer = 20.0f;
 
-    // Start is called before the first frame update
-    void Start()
+
+
+    GameObject drawPlatform(GameObject lastObject, GameObject objToSpawn)
     {
-        lastBlockPrefab = this.gameObject.transform.GetChild(0).gameObject;
-        lastBlock = this.gameObject.transform.GetChild(0).gameObject;
-        this.spawnedLevelBlocks.Add(lastBlock);
+        MeshFilter meshfilter = lastObject.GetComponent<MeshFilter>();
+        Bounds bounds = meshfilter.mesh.bounds;
+
+        float scale = meshfilter.transform.localScale.x;
+        Bounds b = new Bounds(bounds.center * scale, bounds.size * scale);
+
+        Vector3 nextBlockLocation = new Vector3(lastObject.transform.position.x, lastObject.transform.position.y, lastObject.transform.position.z + b.size.z + 1.0f);
+
     }
 
     List<GameObject> spawnSpiralOfPlatforms(GameObject lastObject, GameObject objToSpawn)
@@ -53,19 +61,23 @@ public class ProceduralGeneration : MonoBehaviour
         return levelBlocksSpawnTemp;
     }
 
+    // Start is called before the first frame update
+    void Start()
+    {
+        lastBlockPrefab = this.gameObject.transform.GetChild(0).gameObject;
+        lastBlock = this.gameObject.transform.GetChild(0).gameObject;
+        this.spawnedLevelBlocks.Add(lastBlock);
+    }
+
     // Update is called once per frame
     void Update()
     {
-        int maxNumberOfBlock = 200;
-
         Vector3 playerPosition = this.player.transform.position;
-
-        Debug.Log("Index" + 0);
 
         for (var i = 0; i < this.spawnedLevelBlocks.Count; i++)
         {
             float distance = Vector3.Distance(this.spawnedLevelBlocks[i].transform.position, playerPosition);
-            if (distance > 10.0f && this.spawnedLevelBlocks.Count >= maxNumberOfBlock)
+            if (distance > this.maximumDistanceOfPlatformFromPlayer && this.spawnedLevelBlocks.Count >= this.maximumNumberOfPlatformsAtScene)
             {
                 Destroy(this.spawnedLevelBlocks[i]);
                 this.spawnedLevelBlocks.Remove(this.spawnedLevelBlocks[i]);
@@ -78,7 +90,7 @@ public class ProceduralGeneration : MonoBehaviour
         }
 
 
-        if (this.spawnedLevelBlocks.Count <= maxNumberOfBlock)
+        if (this.spawnedLevelBlocks.Count <= this.maximumNumberOfPlatformsAtScene)
         {
             int blockToSpawn = Random.Range(0, levelBlocks.Count);
 
@@ -97,15 +109,7 @@ public class ProceduralGeneration : MonoBehaviour
 
             if ((blockToSpawn > -1 && (blockToSpawn < (levelBlocks.Count - 1))))
             {
-                MeshFilter meshfilter = this.lastBlock.GetComponent<MeshFilter>();
-                Bounds bounds = meshfilter.mesh.bounds;
-
-                float scale = meshfilter.transform.localScale.x;
-                Bounds b = new Bounds(bounds.center * scale, bounds.size * scale);
-
-                blockObjToSpawn = levelBlocks[blockToSpawn];
-                Vector3 nextBlockLocation = new Vector3(this.lastBlock.transform.position.x, this.lastBlock.transform.position.y, this.lastBlock.transform.position.z + b.size.z + 1.0f);
-                instantiatedGameObject = Instantiate(blockObjToSpawn, nextBlockLocation, (Quaternion.identity));
+                instantiatedGameObject = this.drawPlatform(this.lastBlock, this.levelBlocks[blockToSpawn]);
                 this.spawnedLevelBlocks.Add(instantiatedGameObject);
 
             }
@@ -120,7 +124,6 @@ public class ProceduralGeneration : MonoBehaviour
                 blockObjToSpawn = levelBlocks[0];
             }
 
-            Debug.Log("Spawn" + blockToSpawn);
             this.lastBlock = instantiatedGameObject;
             this.lastBlockPrefab = blockObjToSpawn;
 

@@ -63,12 +63,16 @@ public class PlayerController : MonoBehaviour
             currentSpeed += 0.0005f;
         }
 
-        if (Input.GetAxis("Vertical") > 0 && currentSpeed < maxSpeed) {
-            if (!canMove) {
+        if (Input.GetAxis("Vertical") > 0 && currentSpeed < maxSpeed)
+        {
+            if (!canMove)
+            {
                 canMove = true;
             }
             currentSpeed += 0.01f;
-        } else if (Input.GetAxis("Vertical") < 0 && currentSpeed > minSpeed) {
+        }
+        else if (Input.GetAxis("Vertical") < 0 && currentSpeed > minSpeed)
+        {
             currentSpeed -= 0.01f;
         }
 
@@ -174,7 +178,8 @@ public class PlayerController : MonoBehaviour
             Vector3 gDirection;
             PlatformManager platform = other.gameObject.GetComponent<PlatformManager>();
             gDirection = -other.GetContact(0).normal;
-            if (platform != null) {
+            if (platform != null)
+            {
                 switch (platform.type)
                 {
                     case PlatformManager.PlatformType.Push:
@@ -191,9 +196,12 @@ public class PlayerController : MonoBehaviour
                         modifier += platform.speed;
                         break;
                     case PlatformManager.PlatformType.SpeedDown:
-                        if (modifier - platform.speed >= 0) {
+                        if (modifier - platform.speed >= 0)
+                        {
                             modifier -= platform.speed;
-                        } else {
+                        }
+                        else
+                        {
                             modifier = 0.0f;
                         }
                         break;
@@ -201,10 +209,12 @@ public class PlayerController : MonoBehaviour
                         gDirection = -other.GetContact(0).normal;
                         break;
                 }
-            } else {
-                gDirection = -other.GetContact(0).normal;
             }
-            platformForward = other.transform.forward;  
+            else
+            {
+                gDirection = -transform.up;
+            }
+            platformForward = other.transform.forward;
             this.downDirection = gDirection;
             Physics.gravity = gDirection * 9.81f;
         }
