@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PlatformManager : MonoBehaviour
 {
-    public enum PlatformType {Pull, Push, Rotate};
+    public enum PlatformType {Pull, Push, RotateZ, RotateY, Speed};
     public PlatformType type = PlatformType.Pull;
 
     void Start()
@@ -14,9 +14,11 @@ public class PlatformManager : MonoBehaviour
 
     void FixedUpdate()
     {
-        if (type == PlatformType.Rotate)
+        if (type == PlatformType.RotateZ)
         {
             transform.Rotate(transform.forward);
+        } else if (type == PlatformType.RotateY) {
+            transform.Rotate(transform.up);
         }
     }
 }
