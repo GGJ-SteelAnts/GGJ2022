@@ -4,28 +4,32 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
+    [Header("Move")]
     public float speed = 7.5f;
     public float maxSpeed = 15.0f;
     public float minSpeed = 5.0f;
     [HideInInspector]
     public float currentSpeed = 0f;
     private float modifier = 0.0f;
-    public float jumpSpeed = 7.5f;
-    public float lookSpeed = 7.5f;
-    public float lookXLimit = 40.0f;
-    public Camera playerCamera;
-    public ParticleSystem runningParticles;
     Vector3 moveDirection = Vector3.zero;
-    public float rotationX = 0;
-    public Transform mainObject;
-    // Start is called before the first frame update
-    [HideInInspector]
     bool canMove = true;
     Rigidbody rb;
     float moveDirectionY;
+    public bool isRunning = false;
+    [Header("Jump")]
+    public float jumpSpeed = 7.5f;
+    [HideInInspector]
     public bool jump = false;
     private bool isGrounded = false;
-    public bool isRunning = false;
+    [Header("Camera")]
+    public float lookSpeed = 7.5f;
+    public float lookXLimit = 40.0f;
+    public Camera playerCamera;
+    public float rotationX = 0;
+    [Header("Others")]
+    public ParticleSystem runningParticles;
+    public Transform mainObject;
+    // Start is called before the first frame update
 
     private Vector3 saveDirection;
     private Vector3 downDirection;
