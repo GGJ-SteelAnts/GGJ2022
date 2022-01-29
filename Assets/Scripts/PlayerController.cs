@@ -19,8 +19,7 @@ public class PlayerController : MonoBehaviour
     bool canMove = true;
     Rigidbody rb;
     float moveDirectionY;
-    public Vector3 jump;
-    public float jumpForce = 2.0f;
+    public bool jump = false;
     private bool isGrounded = false;
     public bool isRunning = false;
 
@@ -33,7 +32,6 @@ public class PlayerController : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
-        jump = new Vector3(0.0f, 2.0f, 0.0f);
     }
 
     // Update is called once per frame
@@ -61,13 +59,23 @@ public class PlayerController : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
         {
-            Debug.Log("Jump");
-            rb.AddForce(transform.up * jumpSpeed * 500 * Time.deltaTime, ForceMode.Impulse);
+            jump = true;
             isGrounded = false;
         }
 
         rb.MovePosition(rb.position + moveDirection);
     }
+
+    private void FixedUpdate()
+    {
+        if (jump)
+        {
+            Debug.Log("Jump");
+            rb.AddForce(transform.up * jumpSpeed * 100 * Time.deltaTime, ForceMode.Impulse);
+            jump = false;
+        }
+    }
+
     void OnCollisionExit(Collision other)
     {
         if (other.gameObject.tag == "platform")
