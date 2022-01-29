@@ -18,15 +18,14 @@ public class ProceduralGeneration : MonoBehaviour
     {
         lastBlockPrefab = this.gameObject.transform.GetChild(0).gameObject;
         lastBlock = this.gameObject.transform.GetChild(0).gameObject;
+        lastBlockSpawnPoint = this.gameObject.transform.GetChild(0).gameObject.transform.position;
         this.spawnedLevelBlocks.Add(lastBlock);
     }
 
     List<GameObject> drawLoop(GameObject lastObject, GameObject objToSpawn)
     {
         // configuration:
-        float heightOffset = 10f;
-        float horizontalDistancePerPlatform = 10f;
-        //
+        float horizontalDistancePerPlatform = 0.5f;
 
         List<GameObject> levelBlocksSpawnTemp = new List<GameObject>();
         Debug.Log("Building LOOP");
@@ -35,6 +34,8 @@ public class ProceduralGeneration : MonoBehaviour
         float radius = (pieceCount / 2) * 2;
         float angle = 360f / (float)pieceCount;
         Vector3 centerPoint = new Vector3(lastObject.transform.position.x, (lastObject.transform.position.y + radius), lastObject.transform.position.z);
+
+        float heightOffset = radius;
 
         for (int i = 1; i < pieceCount + 2; i++)
         {
@@ -51,19 +52,21 @@ public class ProceduralGeneration : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        int maxNumberOfBlock = 20;
+
         Vector3 playerPosition = this.player.transform.position;
         float distance = Vector3.Distance(this.spawnedLevelBlocks[0].transform.position, playerPosition);
 
         Debug.Log("Index" + 0);
 
-        if (distance > 10.0f && this.spawnedLevelBlocks.Count > 10)
+        if (distance > 20.0f && this.spawnedLevelBlocks.Count > maxNumberOfBlock)
         {
             Destroy(this.spawnedLevelBlocks[0]);
             this.spawnedLevelBlocks.Remove(this.spawnedLevelBlocks[0]);
             spavnetobjectIndex++;
         }
 
-        if (this.spawnedLevelBlocks.Count <= 10)
+        if (this.spawnedLevelBlocks.Count <= maxNumberOfBlock)
         {
             MeshFilter meshfilter = lastBlock.GetComponent<MeshFilter>();
             Bounds bounds = meshfilter.mesh.bounds;
@@ -72,8 +75,6 @@ public class ProceduralGeneration : MonoBehaviour
             Bounds b = new Bounds(bounds.center * scale, bounds.size * scale);
 
             int blockToSpawn = Random.Range(0, levelBlocks.Count - 1);
-
-            Debug.Log(blockToSpawn);
 
             GameObject instantiatedGameObject;
             GameObject blockObjToSpawn;
@@ -114,14 +115,12 @@ public class ProceduralGeneration : MonoBehaviour
                 {
                     this.spawnedLevelBlocks.Add(spavnedBlock);
                     blockIndex++;
-
                 }
                 instantiatedGameObject = this.spawnedLevelBlocks[this.spawnedLevelBlocks.Count - 1];
                 blockObjToSpawn = levelBlocks[0];
             }
 
             Debug.Log("Spawn" + blockToSpawn);
-
 
             lastBlock = instantiatedGameObject;
             lastBlockSpawnPoint = instantiatedGameObject.transform.position;

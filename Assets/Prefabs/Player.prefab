@@ -1391,7 +1391,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3244356566819001084}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 3.67}
+  m_LocalPosition: {x: 0, y: 4.32, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1414,7 +1414,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3244356566819001084}
-  m_Enabled: 0
+  m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -1477,17 +1477,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b108dca155b156640a1beb1eeaa1995d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  walkSpeed: 7.5
-  runningSpeed: 7.5
+  speed: 7.5
+  maxSpeed: 15
+  minSpeed: 5
+  currentSpeed: 0
+  isRunning: 0
   jumpSpeed: 3
+  jump: 0
   lookSpeed: 7.5
   lookXLimit: 8.75
   playerCamera: {fileID: 3244356567913423211}
-  runningParticles: {fileID: 1608137079}
   rotationX: 0
+  runningParticles: {fileID: 1608137079}
   mainObject: {fileID: 3244356567786994345}
-  jump: 0
-  isRunning: 0
 --- !u!65 &1172583624
 BoxCollider:
   m_ObjectHideFlags: 0
