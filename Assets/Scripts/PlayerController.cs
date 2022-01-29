@@ -178,8 +178,10 @@ public class PlayerController : MonoBehaviour
                 switch (platform.type)
                 {
                     case PlatformManager.PlatformType.Push:
+                        rb.AddExplosionForce(platform.speed * Time.deltaTime * 10, other.gameObject.transform.position, 10);
                         break;
                     case PlatformManager.PlatformType.Pull:
+                        rb.AddExplosionForce(-platform.speed * Time.deltaTime * 10, other.gameObject.transform.position, 10);
                         break;
                     case PlatformManager.PlatformType.RotateY:
                         break;
