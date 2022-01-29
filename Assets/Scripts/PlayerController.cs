@@ -37,6 +37,9 @@ public class PlayerController : MonoBehaviour
 
     private Vector3 follow = Vector3.zero;
 
+    private GameObject pullObject = null;
+    private GameObject pushObject = null;
+
     void Start()
     {
         rb = GetComponent<Rigidbody>();
@@ -113,6 +116,33 @@ public class PlayerController : MonoBehaviour
             angle = Mathf.Atan2(Vector3.Magnitude(axis), Vector3.Dot(-transform.up, saveDirection));
             transform.RotateAround(axis, angle * Time.deltaTime * 5f);
         }
+
+        if (pullObject != null)
+        {
+            PlatformManager platform = pullObject.GetComponent<PlatformManager>();
+            if (platform != null) {
+                float step = platform.speed * Time.deltaTime * 10f;
+                rb.AddForce((pullObject.transform.position - transform.position) * step, ForceMode.Force);
+            }
+            if (Vector3.Distance(pullObject.transform.position, transform.position) > 10f)
+            {
+                pullObject = null;
+            }
+        }
+
+        if (pushObject != null)
+        {
+            PlatformManager platform = pullObject.GetComponent<PlatformManager>();
+            if (platform != null)
+            {
+                float step = platform.speed * Time.deltaTime * 10f;
+                rb.AddForce(-(pushObject.transform.position - transform.position) * step, ForceMode.Force);
+            }
+            if (Vector3.Distance(pushObject.transform.position, transform.position) > 10f)
+            {
+                pushObject = null;
+            }
+        }
     }
 
     void OnCollisionExit(Collision other)
@@ -171,17 +201,18 @@ public class PlayerController : MonoBehaviour
 
             saveDirection = -other.GetContact(0).normal;
 
-            Vector3 gDirection;
+            Vector3 gDirection = -other.GetContact(0).normal;
             PlatformManager platform = other.gameObject.GetComponent<PlatformManager>();
-            gDirection = -other.GetContact(0).normal;
             if (platform != null) {
                 switch (platform.type)
                 {
                     case PlatformManager.PlatformType.Push:
-                        rb.AddForce(other.GetContact(0).normal * platform.speed * Time.deltaTime, ForceMode.Impulse);
+                        pushObject = other.gameObject;
+                        pullObject = null;
                         break;
                     case PlatformManager.PlatformType.Pull:
-                        rb.AddForce(-other.GetContact(0).normal * platform.speed * Time.deltaTime, ForceMode.Impulse);
+                        pullObject = other.gameObject;
+                        pushObject = null;
                         break;
                     case PlatformManager.PlatformType.RotateY:
                         break;
