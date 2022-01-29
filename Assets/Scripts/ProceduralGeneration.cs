@@ -30,7 +30,14 @@ public class ProceduralGeneration : MonoBehaviour
         int pieceCount = 10;
         float radius = (pieceCount / 2) * 2;
         float angle = 360f / (float)pieceCount;
-        Vector3 centerPoint = new Vector3(lastObject.transform.position.x, (lastObject.transform.position.y + radius), lastObject.transform.position.z + 3.0f);
+
+        MeshFilter meshfilter = lastObject.GetComponent<MeshFilter>();
+        Bounds bounds = meshfilter.mesh.bounds;
+
+        float scale = meshfilter.transform.localScale.x;
+        Bounds b = new Bounds(bounds.center * scale, bounds.size * scale);
+
+        Vector3 centerPoint = new Vector3(lastObject.transform.position.x, (lastObject.transform.position.y + radius), this.lastBlock.transform.position.z + b.size.z + 1.0f);
 
         float heightOffset = radius;
 
@@ -73,7 +80,7 @@ public class ProceduralGeneration : MonoBehaviour
 
         if (this.spawnedLevelBlocks.Count <= maxNumberOfBlock)
         {
-            int blockToSpawn = Random.Range(0, levelBlocks.Count - 1);
+            int blockToSpawn = Random.Range(0, levelBlocks.Count);
 
             GameObject instantiatedGameObject;
             GameObject blockObjToSpawn;
@@ -82,21 +89,9 @@ public class ProceduralGeneration : MonoBehaviour
             if (blockObjToSpawn.name == lastBlockPrefab.name)
             {
                 Debug.Log("Same Block");
-                if ((blockToSpawn + 1) <= levelBlocks.Count)
+                if (blockToSpawn < levelBlocks.Count || blockToSpawn > -1)
                 {
-                    blockToSpawn++;
-                }
-                else if ((blockToSpawn - 1) >= levelBlocks.Count)
-                {
-                    blockToSpawn--;
-                }
-                if ((blockToSpawn + 1) <= levelBlocks.Count)
-                {
-                    blockToSpawn++;
-                }
-                else if ((blockToSpawn - 1) >= levelBlocks.Count)
-                {
-                    blockToSpawn--;
+                    blockToSpawn = Random.Range(0, (levelBlocks.Count - 1));
                 }
             }
 
