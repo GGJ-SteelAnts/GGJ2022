@@ -25,8 +25,11 @@ public class UiController : MonoBehaviour
     }
     public static void SaveGame()
     {
-        PlayerPrefs.SetInt("HighestScore", (int)UiController.distance);
-        PlayerPrefs.Save();
+        if (UiController.distance > UiController.highScore)
+        {
+            PlayerPrefs.SetInt("HighestScore", (int)UiController.distance);
+            PlayerPrefs.Save();
+        }
         Debug.Log("Game data saved!");
     }
     static void LoadGame()
