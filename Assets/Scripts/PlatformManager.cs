@@ -6,6 +6,7 @@ public class PlatformManager : MonoBehaviour
 {
     public enum PlatformType {Pull, Push, RotateZ, RotateY, Speed};
     public PlatformType type = PlatformType.Pull;
+    public float speed = 5;
 
     void Start()
     {
@@ -16,9 +17,9 @@ public class PlatformManager : MonoBehaviour
     {
         if (type == PlatformType.RotateZ)
         {
-            transform.Rotate(transform.forward);
+            transform.Rotate(transform.forward * speed * Time.deltaTime);
         } else if (type == PlatformType.RotateY) {
-            transform.Rotate(transform.up);
+            transform.Rotate(transform.up * speed * Time.deltaTime);
         }
     }
 }

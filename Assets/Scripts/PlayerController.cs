@@ -97,6 +97,11 @@ public class PlayerController : MonoBehaviour
             {
                 gDirection = -transform.up;
             }
+            else if (platform != null && platform.type == PlatformManager.PlatformType.Speed)
+            {
+                rb.AddForce(other.transform.forward * platform.speed * 10 * Time.deltaTime, ForceMode.Impulse);
+                gDirection = -transform.up;
+            }
             else
             {
                 gDirection = -transform.up;
