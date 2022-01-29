@@ -11,7 +11,7 @@ public class PlayerController : MonoBehaviour
     public float minSpeed = 5.0f;
     [HideInInspector]
     public float currentSpeed = 0f;
-    private float modifier = 0.0f;
+    private float speedModifier = 0.0f;
     Vector3 moveDirection = Vector3.zero;
     bool canMove = false;
     Rigidbody rb;
@@ -22,7 +22,7 @@ public class PlayerController : MonoBehaviour
     [Header("Jump")]
     public float jumpSpeed = 7.5f;
     [HideInInspector]
-    public bool jump = false;
+    public bool inAir = false;
     private bool isGrounded = false;
     [Header("Camera")]
     public float lookSpeed = 7.5f;
@@ -84,41 +84,41 @@ public class PlayerController : MonoBehaviour
             currentSpeed -= 0.01f;
         }
 
-        float curSpeedX = canMove ? (currentSpeed + modifier) : 0;
-        float curSpeedY = canMove ? (currentSpeed + 3.5f + modifier) * Input.GetAxis("Horizontal") : 0;
+        float curSpeedX = canMove ? (currentSpeed + speedModifier) : 0;
+        float curSpeedY = canMove ? (currentSpeed + 3.5f + speedModifier) * Input.GetAxis("Horizontal") : 0;
 
         moveDirection = (platformForward * curSpeedX * Time.deltaTime) + (transform.right * curSpeedY * Time.deltaTime);
 
-        if ((currentSpeed + modifier) >= maxSpeed && !runningParticles.isPlaying)
+        if ((currentSpeed + speedModifier) >= maxSpeed && !runningParticles.isPlaying)
         {
             runningParticles.Play(true);
         }
-        else if ((currentSpeed + modifier) < maxSpeed && runningParticles.isPlaying)
+        else if ((currentSpeed + speedModifier) < maxSpeed && runningParticles.isPlaying)
         {
             runningParticles.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
         }
 
         if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
         {
-            jump = true;
+            inAir = true;
             isGrounded = false;
         }
 
         if (audioSource != null && audioClips.Count > 0) {
-            if ((currentSpeed + modifier) > speed * 3f && (currentSpeed + modifier) < speed * 7f)
+            if ((currentSpeed + speedModifier) > speed * 3f && (currentSpeed + speedModifier) < speed * 7f)
             {
                 if (audioClips.Count > 1 && audioSource.clip != audioClips[1]) {
                     audioSource.Stop();
                     audioSource.clip = audioClips[1];
                     audioSource.Play();
                 }
-            } else if ((currentSpeed + modifier) <= speed * 3f) {
+            } else if ((currentSpeed + speedModifier) <= speed * 3f) {
                 if (audioSource.clip != audioClips[0]) {
                     audioSource.Stop();
                     audioSource.clip = audioClips[0];
                     audioSource.Play();
                 }
-            } else if ((currentSpeed + modifier) >= speed * 7f) {
+            } else if ((currentSpeed + speedModifier) >= speed * 7f) {
                 if (audioClips.Count > 2 && audioSource.clip != audioClips[2])
                 {
                     audioSource.Stop();
@@ -133,11 +133,11 @@ public class PlayerController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (jump)
+        if (inAir)
         {
             // Debug.Log("Jump");
             rb.AddForce(transform.up * jumpSpeed * 100 * Time.deltaTime, ForceMode.Impulse);
-            jump = false;
+            inAir = false;
         }
 
         if (rb.velocity.magnitude != 0 && Vector3.Dot(rb.velocity.normalized, Physics.gravity.normalized) > 0)
@@ -273,16 +273,16 @@ public class PlayerController : MonoBehaviour
                     case PlatformManager.PlatformType.RotateZ:
                         break;
                     case PlatformManager.PlatformType.SpeedUp:
-                        modifier += platform.speed;
+                        speedModifier += platform.speed;
                         break;
                     case PlatformManager.PlatformType.SpeedDown:
-                        if (modifier - platform.speed >= 0)
+                        if (speedModifier - platform.speed >= 0)
                         {
-                            modifier -= platform.speed;
+                            speedModifier -= platform.speed;
                         }
                         else
                         {
-                            modifier = 0.0f;
+                            speedModifier = 0.0f;
                         }
                         break;
                     default:

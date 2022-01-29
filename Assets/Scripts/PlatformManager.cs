@@ -8,11 +8,6 @@ public class PlatformManager : MonoBehaviour
     public PlatformType type = PlatformType.Pull;
     public float speed = 5;
 
-    void Start()
-    {
-        
-    }
-
     void FixedUpdate()
     {
         if (type == PlatformType.RotateZ)

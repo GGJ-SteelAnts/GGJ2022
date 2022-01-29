@@ -4,11 +4,6 @@ using UnityEngine;
 
 public class gizmoManager : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-
-    }
 
     void OnDrawGizmos()
     {
@@ -32,10 +27,5 @@ public class gizmoManager : MonoBehaviour
         {
             return new Bounds();
         }
-    }
-    // Update is called once per frame
-    void Update()
-    {
-
     }
 }
