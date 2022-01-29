@@ -23,6 +23,11 @@ public class ProceduralGeneration : MonoBehaviour
 
     List<GameObject> drawLoop(GameObject lastObject, GameObject objToSpawn)
     {
+        // configuration:
+        float heightOffset = 5f;
+        float horizontalDistancePerPlatform = 60;
+        //
+
         List<GameObject> levelBlocksSpawnTemp = new List<GameObject>();
         Debug.Log("Building LOOP");
 
@@ -37,7 +42,7 @@ public class ProceduralGeneration : MonoBehaviour
             Vector3 direction = rotation * Vector3.down;
             Vector3 position = (lastObject.transform.position + (direction * radius));
 
-            levelBlocksSpawnTemp.Add(Instantiate(objToSpawn, new Vector3(position.x, position.y, position.z + (float)(i * 3.0f)), rotation));
+            levelBlocksSpawnTemp.Add(Instantiate(objToSpawn, new Vector3(position.x, position.y + heightOffset, position.z + (float)(i * heightOffset)), rotation));
         }
 
         return levelBlocksSpawnTemp;
