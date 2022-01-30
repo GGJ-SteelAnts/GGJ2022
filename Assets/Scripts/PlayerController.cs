@@ -39,6 +39,7 @@ public class PlayerController : MonoBehaviour
     private Vector3 saveDirection;
     private Vector3 downDirection;
     private Vector3 platformForward;
+    private Vector3 platformRight;
 
     private Vector3 follow = Vector3.zero;
 
@@ -49,6 +50,7 @@ public class PlayerController : MonoBehaviour
     {
         rb = GetComponent<Rigidbody>();
         platformForward = Vector3.forward;
+        platformRight = Vector3.right;
     }
 
     public void disableCursor()
@@ -87,7 +89,7 @@ public class PlayerController : MonoBehaviour
         float curSpeedX = canMove ? (currentSpeed + speedModifier) : 0;
         float curSpeedY = canMove ? (currentSpeed + currentSpeed + speedModifier) * Input.GetAxis("Horizontal") : 0;
 
-        moveDirection = (platformForward * curSpeedX * Time.deltaTime) + (transform.right * curSpeedY * Time.deltaTime);
+        moveDirection = (transform.forward * curSpeedX * Time.deltaTime) + (transform.right * curSpeedY * Time.deltaTime);
 
         if ((currentSpeed + speedModifier) >= maxSpeed && !runningParticles.isPlaying)
         {
@@ -227,7 +229,7 @@ public class PlayerController : MonoBehaviour
         {
             return;
         }
-        this.downDirection = -other.GetContact(0).normal;
+        this.downDirection = -transform.up;
         saveDirection = -other.GetContact(0).normal;
 
         // TODO: Handle other PlatformTypes
@@ -291,6 +293,7 @@ public class PlayerController : MonoBehaviour
                 gDirection = -other.GetContact(0).normal;
             }
             platformForward = other.transform.forward;
+            platformRight = other.transform.right;
             this.downDirection = gDirection;
             Physics.gravity = gDirection * 9.81f;
         }

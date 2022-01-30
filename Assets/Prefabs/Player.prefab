@@ -1628,8 +1628,8 @@ MonoBehaviour:
   isFalling: 0
   jumpSpeed: 3
   inAir: 0
-  lookSpeed: 7.5
-  lookXLimit: 8.75
+  lookSpeed: 5
+  lookXLimit: 10
   playerCamera: {fileID: 3244356567913423211}
   rotationX: 0
   runningParticles: {fileID: 1608137079}
