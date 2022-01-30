@@ -1635,6 +1635,12 @@ MonoBehaviour:
   runningParticles: {fileID: 1608137079}
   mainObject: {fileID: 3244356567786994345}
   audioSource: {fileID: 1943902172017936589}
+  jumpClips:
+  - {fileID: 8300000, guid: 48262e53308f9ee44b7ea428e20433e8, type: 3}
+  - {fileID: 8300000, guid: fb8354238ee05b2428c8018b060f8b02, type: 3}
+  - {fileID: 8300000, guid: c17451694befdcd4c858556777f35b2d, type: 3}
+  - {fileID: 8300000, guid: da7577d64ed743a479eb66b7b25ef537, type: 3}
+  - {fileID: 8300000, guid: 494197b7e4667cf429bef31c31392309, type: 3}
   audioClips:
   - {fileID: 8300000, guid: 5e15f53ccc08c4e4496e13306a9e4743, type: 3}
   - {fileID: 8300000, guid: 049628ae43735224990d9bcea2f744ad, type: 3}

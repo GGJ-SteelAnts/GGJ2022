@@ -33,6 +33,7 @@ public class PlayerController : MonoBehaviour
     public ParticleSystem runningParticles;
     public Transform mainObject;
     public AudioSource audioSource;
+    public List<AudioClip> jumpClips = new List<AudioClip>();
     public List<AudioClip> audioClips = new List<AudioClip>();
     // Start is called before the first frame update
 
@@ -138,6 +139,10 @@ public class PlayerController : MonoBehaviour
         if (inAir)
         {
             // Debug.Log("Jump");
+            if (audioSource != null && jumpClips.Count > 0)
+            {
+                audioSource.PlayOneShot(jumpClips[Random.Range(0, jumpClips.Count)]);
+            }
             rb.AddForce(transform.up * jumpSpeed * 100f * Time.deltaTime, ForceMode.Impulse);
             inAir = false;
         }
