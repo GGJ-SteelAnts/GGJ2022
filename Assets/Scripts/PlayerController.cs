@@ -85,7 +85,7 @@ public class PlayerController : MonoBehaviour
         }
 
         float curSpeedX = canMove ? (currentSpeed + speedModifier) : 0;
-        float curSpeedY = canMove ? (currentSpeed + 3.5f + speedModifier) * Input.GetAxis("Horizontal") : 0;
+        float curSpeedY = canMove ? (currentSpeed + 5f + speedModifier) * Input.GetAxis("Horizontal") : 0;
 
         moveDirection = (platformForward * curSpeedX * Time.deltaTime) + (transform.right * curSpeedY * Time.deltaTime);
 
@@ -105,7 +105,7 @@ public class PlayerController : MonoBehaviour
         }
 
         if (audioSource != null && audioClips.Count > 0) {
-            if ((currentSpeed + speedModifier) > speed * 3f && (currentSpeed + speedModifier) < speed * 7f)
+            if ((currentSpeed + speedModifier) > speed * 3f && (currentSpeed + speedModifier) < speed * 6f)
             {
                 if (audioClips.Count > 1 && audioSource.clip != audioClips[1]) {
                     audioSource.Stop();
@@ -118,7 +118,7 @@ public class PlayerController : MonoBehaviour
                     audioSource.clip = audioClips[0];
                     audioSource.Play();
                 }
-            } else if ((currentSpeed + speedModifier) >= speed * 7f) {
+            } else if ((currentSpeed + speedModifier) >= speed * 6f) {
                 if (audioClips.Count > 2 && audioSource.clip != audioClips[2])
                 {
                     audioSource.Stop();
@@ -136,7 +136,7 @@ public class PlayerController : MonoBehaviour
         if (inAir)
         {
             // Debug.Log("Jump");
-            rb.AddForce(transform.up * jumpSpeed * 100 * Time.deltaTime, ForceMode.Impulse);
+            rb.AddForce(transform.up * jumpSpeed * 100f * Time.deltaTime, ForceMode.Impulse);
             inAir = false;
         }
 
@@ -219,10 +219,10 @@ public class PlayerController : MonoBehaviour
 
         if (other.GetContact(0).normal == other.transform.forward
                 || other.GetContact(0).normal == -other.transform.forward
+                || other.GetContact(0).normal == -other.transform.right
+                || other.GetContact(0).normal == other.transform.right
                 || (other.GetContact(0).normal != -other.transform.up
-                    && other.GetContact(0).normal != other.transform.up
-                    && other.GetContact(0).normal != other.transform.right
-                    && other.GetContact(0).normal != -other.transform.right)
+                    && other.GetContact(0).normal != other.transform.up)
             )
         {
             return;
@@ -240,24 +240,10 @@ public class PlayerController : MonoBehaviour
         isGrounded = true;
         if (other.gameObject.tag == "platform")
         {
-
-            if (other.GetContact(0).normal == other.transform.forward
-                || other.GetContact(0).normal == -other.transform.forward
-                || (other.GetContact(0).normal != -other.transform.up
-                    && other.GetContact(0).normal != other.transform.up
-                    && other.GetContact(0).normal != other.transform.right
-                    && other.GetContact(0).normal != -other.transform.right)
-            )
-            {
-                return;
-            }
-
-            saveDirection = -other.GetContact(0).normal;
-
-            Vector3 gDirection = -other.GetContact(0).normal;
             PlatformManager platform = other.gameObject.GetComponent<PlatformManager>();
             if (platform != null)
             {
+                platform.Step();
                 switch (platform.type)
                 {
                     case PlatformManager.PlatformType.Push:
@@ -285,14 +271,24 @@ public class PlayerController : MonoBehaviour
                             speedModifier = 0.0f;
                         }
                         break;
-                    default:
-                        gDirection = -other.GetContact(0).normal;
-                        break;
                 }
             }
-            else
+            if (other.GetContact(0).normal == other.transform.forward
+                || other.GetContact(0).normal == -other.transform.forward
+                || other.GetContact(0).normal == -other.transform.right
+                || other.GetContact(0).normal == other.transform.right
+                || (other.GetContact(0).normal != -other.transform.up
+                    && other.GetContact(0).normal != other.transform.up)
+            )
             {
-                gDirection = -transform.up;
+                return;
+            }
+
+            Vector3 gDirection = -other.GetContact(0).normal;
+            saveDirection = gDirection;
+            if (platform == null)
+            {
+                gDirection = -other.GetContact(0).normal;
             }
             platformForward = other.transform.forward;
             this.downDirection = gDirection;

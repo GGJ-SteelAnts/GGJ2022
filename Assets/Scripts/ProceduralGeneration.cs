@@ -47,7 +47,7 @@ public class ProceduralGeneration : MonoBehaviour
     List<GameObject> spawnSpiralOfPlatforms(GameObject lastObject, GameObject objToSpawn, GameObject parentLevelObject)
     {
         // configuration:
-        float horizontalDistancePerPlatform = (float)Random.Range(0.5f, 2.0f);
+        float horizontalDistancePerPlatform = (float)Random.Range(1.0f, 3.0f);
 
         List<GameObject> levelBlocksSpawnTemp = new List<GameObject>();
         // Debug.Log("Building LOOP");
@@ -102,7 +102,7 @@ public class ProceduralGeneration : MonoBehaviour
         for (var i = 0; i < this.spawnedLevelBlocks.Count; i++)
         {
             float distance = Vector3.Distance(this.spawnedLevelBlocks[i].transform.position, playerPosition);
-            if (distance > this.maximumDistanceOfPlatformFromPlayer && this.spawnedLevelBlocks.Count >= this.maximumNumberOfPlatformsAtScene)
+            if (distance > this.maximumDistanceOfPlatformFromPlayer && this.spawnedLevelBlocks.Count >= this.maximumNumberOfPlatformsAtScene && playerPosition.z > this.spawnedLevelBlocks[i].transform.position.z)
             {
                 Destroy(this.spawnedLevelBlocks[i]);
                 this.spawnedLevelBlocks.Remove(this.spawnedLevelBlocks[i]);
