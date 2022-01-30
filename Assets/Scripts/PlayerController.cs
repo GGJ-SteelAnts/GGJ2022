@@ -184,7 +184,7 @@ public class PlayerController : MonoBehaviour
         {
             Physics.gravity = this.downDirection * 9.81f;
 
-            PlatformManager platform = pullObject.GetComponent<PlatformManager>();
+            PlatformManager platform = other.gameObject.GetComponent<PlatformManager>();
 
             if (platform != null)
             {
