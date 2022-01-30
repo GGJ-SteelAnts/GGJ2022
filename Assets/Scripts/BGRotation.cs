@@ -8,7 +8,7 @@ public class BGRotation : MonoBehaviour
 
     private void Start()
     {
-        rotation = new Vector3(Random.Range(0, 360), Random.Range(0, 360), Random.Range(0, 360));
+        rotation = new Vector3(Random.Range(0, 360), Random.Range(0, 360), Random.Range(0, 360)) * 0.009f;
     }
 
     void FixedUpdate()
