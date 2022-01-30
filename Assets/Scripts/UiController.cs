@@ -22,6 +22,11 @@ public class UiController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        this.player = GameObject.Find("Body");
+        ProceduralGeneration procGenScript = GameObject.Find("Level").GetComponent<ProceduralGeneration>();
+        if (procGenScript == null)Debug.LogError("REEEEeee!!");
+        procGenScript.player = menuCamera;
+        // procGenScript.Player = playerCamera.parent;
         startPosition = this.player.transform.position.z;
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
@@ -30,6 +35,8 @@ public class UiController : MonoBehaviour
     }
     public void OnNewGameBtnClick()
     {
+        ProceduralGeneration procGenScript = GameObject.Find("Level").GetComponent<ProceduralGeneration>();
+        procGenScript.player = this.player;
         UiController.isInMenu = false;
         menuCamera.SetActive(false);
         playerCamera.SetActive(true);
