@@ -160,8 +160,7 @@ public class ProceduralGeneration : MonoBehaviour
             GameObject instantiatedGameObject;
             GameObject blockObjToSpawn;
 
-            int blockToSpawn = Random.Range(0, (levelBlocks.Count + 1));
-
+            int blockToSpawn = Random.Range(1, (levelBlocks.Count + 1));
 
             if (
                 (blockToSpawn > -1 && (blockToSpawn < levelBlocks.Count)) &&
@@ -171,14 +170,14 @@ public class ProceduralGeneration : MonoBehaviour
                 Debug.Log("Same Block");
                 if (blockToSpawn > levelBlocks.Count || blockToSpawn < 0)
                 {
-                    blockToSpawn = Random.Range(0, levelBlocks.Count);
+                    blockToSpawn = Random.Range(1, levelBlocks.Count);
                 }
             }
 
 
             if (blockToSpawn > -1 && (blockToSpawn < levelBlocks.Count))
             {
-                if (this.spawnedLevelBlocks.Count == 3)
+                if (this.spawnedLevelBlocks.Count < 3)
                 {
                     blockToSpawn = 10;
                 }
