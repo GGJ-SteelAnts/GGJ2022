@@ -109,6 +109,12 @@ public class ProceduralGeneration : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+
+        // if (playerControlsSript.isFalling)
+        // {
+        //     return;
+        // }
+
         Vector3 playerPosition = this.player.transform.position;
         PlayerController playerControlsSript = this.player.GetComponent<PlayerController>();
 
@@ -118,11 +124,6 @@ public class ProceduralGeneration : MonoBehaviour
             {
                 this.backgroundLevelBlocks.Add(spavnedBgBlock);
             }
-        }
-
-        if (playerControlsSript.isFalling)
-        {
-            return;
         }
 
         for (var i = 0; i < this.backgroundLevelBlocks.Count; i++)
