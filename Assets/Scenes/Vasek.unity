@@ -5121,6 +5121,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   levelBlocks:
+  - {fileID: 6736808733118194127, guid: ab2d135bcffd2ab47be4fc93bca8fbc2, type: 3}
   - {fileID: 8768991388683709947, guid: 97d4c453fb5affa448968cb5ce9ca2f4, type: 3}
   - {fileID: 8768991388683709947, guid: 2e18815c9b04872428df50ccfc059d03, type: 3}
   - {fileID: 8768991388683709947, guid: 99c4e582c7358f346ab00dae4ae956f9, type: 3}
@@ -5138,6 +5139,8 @@ MonoBehaviour:
   backgroundBlocks:
   - {fileID: 5287741263160770601, guid: 7a596fa177a8fd34face58d8f58e0e41, type: 3}
   - {fileID: 2394897577413455488, guid: 1348a4eeda762ae4db83cd873efb4c44, type: 3}
+  - {fileID: 4691818963504853049, guid: af1705b3a0c58cd4291d1bbc29043f72, type: 3}
+  - {fileID: 4895932434283755622, guid: e69961730cac2d540b765dd92e85cd8c, type: 3}
   backgroundLevelBlocks: []
   player: {fileID: 250075900}
   lastBlock: {fileID: 126480931}
@@ -5361,13 +5364,57 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3244356567871325868, guid: ec622cf6f0988bc42a99ba84304c15a9, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3244356567871325870, guid: ec622cf6f0988bc42a99ba84304c15a9, type: 3}
+      propertyPath: m_margin.z
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 3244356567871325870, guid: ec622cf6f0988bc42a99ba84304c15a9, type: 3}
+      propertyPath: m_VerticalAlignment
+      value: 4096
+      objectReference: {fileID: 0}
+    - target: {fileID: 3244356567871325870, guid: ec622cf6f0988bc42a99ba84304c15a9, type: 3}
+      propertyPath: m_HorizontalAlignment
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 4875366008290660908, guid: ec622cf6f0988bc42a99ba84304c15a9, type: 3}
+      propertyPath: m_fontSize
+      value: 36
+      objectReference: {fileID: 0}
+    - target: {fileID: 4875366008290660908, guid: ec622cf6f0988bc42a99ba84304c15a9, type: 3}
+      propertyPath: m_margin.x
+      value: 15
+      objectReference: {fileID: 0}
     - target: {fileID: 4875366008290660908, guid: ec622cf6f0988bc42a99ba84304c15a9, type: 3}
       propertyPath: m_isRightToLeft
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4875366008290660908, guid: ec622cf6f0988bc42a99ba84304c15a9, type: 3}
+      propertyPath: m_enableAutoSizing
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4875366008290660908, guid: ec622cf6f0988bc42a99ba84304c15a9, type: 3}
       propertyPath: m_TextStyleHashCode
       value: -1183493901
+      objectReference: {fileID: 0}
+    - target: {fileID: 4875366008290660908, guid: ec622cf6f0988bc42a99ba84304c15a9, type: 3}
+      propertyPath: m_VerticalAlignment
+      value: 4096
+      objectReference: {fileID: 0}
+    - target: {fileID: 4875366008290660908, guid: ec622cf6f0988bc42a99ba84304c15a9, type: 3}
+      propertyPath: checkPaddingRequired
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4875366008290660908, guid: ec622cf6f0988bc42a99ba84304c15a9, type: 3}
+      propertyPath: m_enableExtraPadding
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4875366008290660908, guid: ec622cf6f0988bc42a99ba84304c15a9, type: 3}
+      propertyPath: m_HorizontalAlignment
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ec622cf6f0988bc42a99ba84304c15a9, type: 3}
