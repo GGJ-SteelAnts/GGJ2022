@@ -117,7 +117,7 @@ GameObject:
   - component: {fileID: 8383421295717427161}
   - component: {fileID: 3996111038030861644}
   m_Layer: 0
-  m_Name: Platform_yellow
+  m_Name: platform_yellow
   m_TagString: platform
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

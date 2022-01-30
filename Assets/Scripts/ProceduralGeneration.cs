@@ -73,7 +73,7 @@ public class ProceduralGeneration : MonoBehaviour
         // Debug.Log("Building LOOP");
 
         int pieceCount = 10;
-        float radius = (pieceCount / 2) * 2;
+        float radius = (pieceCount / 2) + 1.9f;
         float angle = 360f / (float)pieceCount;
 
         Bounds bounds = this.getPrefabBounds(lastObject);
