@@ -95,6 +95,7 @@ GameObject:
   - component: {fileID: 6715234968966001404}
   - component: {fileID: 5071310171994536778}
   - component: {fileID: 8372693939530454457}
+  - component: {fileID: 458963570543655786}
   m_Layer: 0
   m_Name: platform 4 neutral
   m_TagString: platform
@@ -161,6 +162,22 @@ MonoBehaviour:
   speed: 5
   audioSource: {fileID: 0}
   audioClips: []
+--- !u!54 &458963570543655786
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1560962678462888388}
+  serializedVersion: 2
+  m_Mass: 50
+  m_Drag: 0
+  m_AngularDrag: 0
+  m_UseGravity: 0
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 126
+  m_CollisionDetection: 2
 --- !u!1 &1560962679917322222
 GameObject:
   m_ObjectHideFlags: 0

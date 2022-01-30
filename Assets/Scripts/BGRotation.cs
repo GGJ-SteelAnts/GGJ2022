@@ -4,9 +4,16 @@ using UnityEngine;
 
 public class BGRotation : MonoBehaviour
 {
-    void Update()
+    private Vector3 rotation;
+
+    private void Start()
     {
-        transform.Rotate(new Vector3(Random.Range(0,360), Random.Range(0, 360), Random.Range(0, 360)));
+        rotation = new Vector3(Random.Range(0, 360), Random.Range(0, 360), Random.Range(0, 360));
+    }
+
+    void FixedUpdate()
+    {
+        transform.Rotate(rotation);
     }
 
     private void OnTriggerEnter(Collider other)

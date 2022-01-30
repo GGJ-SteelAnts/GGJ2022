@@ -114,6 +114,7 @@ GameObject:
   - component: {fileID: 3339862426328537977}
   - component: {fileID: 3865253352867341094}
   - component: {fileID: -7597049073915248875}
+  - component: {fileID: 3278078638141404736}
   m_Layer: 0
   m_Name: Platform_Green
   m_TagString: platform
@@ -229,6 +230,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 61dae18984b7ff147ab1d77fb817687a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!54 &3278078638141404736
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8768991388683709947}
+  serializedVersion: 2
+  m_Mass: 50
+  m_Drag: 0
+  m_AngularDrag: 0
+  m_UseGravity: 0
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 126
+  m_CollisionDetection: 2
 --- !u!1 &8985668614484660023
 GameObject:
   m_ObjectHideFlags: 0
