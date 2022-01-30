@@ -9,27 +9,28 @@ public class ProceduralGeneration : MonoBehaviour
     private int maximumNumberOfPlatformsAtScene = 100;
     public List<GameObject> spawnedLevelBlocks = new List<GameObject>();
     private float maximumDistanceOfPlatformFromPlayer = 20.0f;
+    private GameObject levelParrent = null;
 
     [Header("Background")]
     public List<GameObject> backgroundBlocks = new List<GameObject>();
     public List<GameObject> backgroundLevelBlocks = new List<GameObject>();
     private float maximumDistanceOfPlatformFromPlayerBg = 600.0f;
+    public GameObject bgParrent = null;
 
     public GameObject player = null;
     public GameObject lastBlock;
     private GameObject lastBlockPrefab;
-    private GameObject levelParrent = null;
 
     List<GameObject> spawnBackgroundObjects(Vector3 playerPosition, List<GameObject> backgroundBlocks, GameObject parentLevelObject)
     {
         List<GameObject> bgBlocksSpawnTemp = new List<GameObject>();
         for (var i = 0; i < 200; i++)
         {
-            int bgElement = Random.Range(0, backgroundBlocks.Count);
+            int bgElement = Random.Range(0, backgroundBlocks.Count - 1);
 
             GameObject newBgObject = Instantiate(backgroundBlocks[bgElement], (Random.insideUnitSphere * Random.Range(300, maximumDistanceOfPlatformFromPlayerBg) + playerPosition + new Vector3(0, 0, 50)), (Quaternion.identity));
             newBgObject.transform.Rotate(new Vector3(Random.Range(0, 360), Random.Range(0, 360), Random.Range(0, 360)));
-            newBgObject.transform.parent = parentLevelObject.transform;
+            newBgObject.transform.parent = bgParrent.transform;
 
             bgBlocksSpawnTemp.Add(newBgObject);
         }
