@@ -219,18 +219,18 @@ public class PlayerController : MonoBehaviour
             return;
         }
 
-        if (other.GetContact(0).normal == other.transform.forward
-                || other.GetContact(0).normal == -other.transform.forward
-                || other.GetContact(0).normal == -other.transform.right
-                || other.GetContact(0).normal == other.transform.right
-                || (other.GetContact(0).normal != -other.transform.up
-                    && other.GetContact(0).normal != other.transform.up)
+        if (other.GetContact(other.contacts.Length - 1).normal == other.transform.forward
+                || other.GetContact(other.contacts.Length - 1).normal == -other.transform.forward
+                || other.GetContact(other.contacts.Length - 1).normal == -other.transform.right
+                || other.GetContact(other.contacts.Length - 1).normal == other.transform.right
+                || (other.GetContact(other.contacts.Length - 1).normal != -other.transform.up
+                    && other.GetContact(other.contacts.Length - 1).normal != other.transform.up)
             )
         {
             return;
         }
         this.downDirection = -transform.up;
-        saveDirection = -other.GetContact(0).normal;
+        saveDirection = -other.GetContact(other.contacts.Length - 1).normal;
 
         // TODO: Handle other PlatformTypes
         Physics.gravity = this.downDirection * 9.81f;
