@@ -1638,6 +1638,7 @@ MonoBehaviour:
   audioClips:
   - {fileID: 8300000, guid: 5e15f53ccc08c4e4496e13306a9e4743, type: 3}
   - {fileID: 8300000, guid: 049628ae43735224990d9bcea2f744ad, type: 3}
+  - {fileID: 8300000, guid: 227c760da48796046b26b76b3706319b, type: 3}
 --- !u!65 &1172583624
 BoxCollider:
   m_ObjectHideFlags: 0

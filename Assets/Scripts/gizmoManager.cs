@@ -20,7 +20,7 @@ public class gizmoManager : MonoBehaviour
         if (renderers.Length > 0)
         {
             Bounds bounds = renderers[0].bounds;
-            for (int i = 1, ni = renderers.Length; i < ni; i++)
+            for (int i = 0, ni = renderers.Length; i < ni; i++)
             {
                 bounds.Encapsulate(renderers[i].bounds);
             }

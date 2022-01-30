@@ -22,7 +22,7 @@ public class ProceduralGeneration : MonoBehaviour
         if (renderers.Length > 0)
         {
             Bounds bounds = renderers[0].bounds;
-            for (int i = 0; i < renderers.Length; i++)
+            for (int i = 1; i < renderers.Length; i++)
             {
                 bounds.Encapsulate(renderers[i].bounds);
             }
@@ -37,10 +37,8 @@ public class ProceduralGeneration : MonoBehaviour
     GameObject drawPlatform(GameObject lastObject, GameObject objToSpawn, GameObject parentLevelObject)
     {
         Bounds bounds = this.getPrefabBounds(lastObject);
-        Bounds b = new Bounds(bounds.center, bounds.size);
-
-        Vector3 nextBlockLocation = new Vector3(lastObject.transform.position.x, lastObject.transform.position.y, lastObject.transform.position.z + b.size.z);
-
+        Bounds b = this.getPrefabBounds(objToSpawn);
+        Vector3 nextBlockLocation = new Vector3(lastObject.transform.position.x, lastObject.transform.position.y, lastObject.transform.position.z + bounds.extents.z + b.extents.z);
         GameObject newObject = Instantiate(objToSpawn, nextBlockLocation, (Quaternion.identity));
         newObject.transform.parent = parentLevelObject.transform;
         return newObject;
@@ -49,7 +47,7 @@ public class ProceduralGeneration : MonoBehaviour
     List<GameObject> spawnSpiralOfPlatforms(GameObject lastObject, GameObject objToSpawn, GameObject parentLevelObject)
     {
         // configuration:
-        float horizontalDistancePerPlatform = (float)Random.Range(0.5f, 2.0f); ;
+        float horizontalDistancePerPlatform = (float)Random.Range(0.5f, 2.0f);
 
         List<GameObject> levelBlocksSpawnTemp = new List<GameObject>();
         // Debug.Log("Building LOOP");
@@ -59,9 +57,9 @@ public class ProceduralGeneration : MonoBehaviour
         float angle = 360f / (float)pieceCount;
 
         Bounds bounds = this.getPrefabBounds(lastObject);
-        Bounds b = new Bounds(bounds.center, bounds.size);
+        Bounds b = this.getPrefabBounds(objToSpawn);
 
-        Vector3 centerPoint = new Vector3(lastObject.transform.position.x, (lastObject.transform.position.y + radius), lastObject.transform.position.z + b.size.z);
+        Vector3 centerPoint = new Vector3(lastObject.transform.position.x, (lastObject.transform.position.y + radius), lastObject.transform.position.z + (lastObject.name.Contains("chunk") ? bounds.size.z : bounds.extents.z) + b.extents.z);
 
         float heightOffset = radius;
 
@@ -71,7 +69,7 @@ public class ProceduralGeneration : MonoBehaviour
             Vector3 direction = rotation * Vector3.down;
             Vector3 position = (lastObject.transform.position + (direction * radius));
 
-            GameObject newObject = Instantiate(objToSpawn, new Vector3(position.x, position.y + heightOffset, position.z + (float)(i * horizontalDistancePerPlatform)), rotation);
+            GameObject newObject = Instantiate(objToSpawn, new Vector3(position.x, position.y + heightOffset, position.z + (float)(i * horizontalDistancePerPlatform) + (lastObject.name.Contains("chunk") ? bounds.extents.z : 0f)), rotation);
             newObject.transform.parent = parentLevelObject.transform;
             levelBlocksSpawnTemp.Add(newObject);
         }
