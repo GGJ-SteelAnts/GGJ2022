@@ -58,6 +58,7 @@ public class ProceduralGeneration : MonoBehaviour
     }
     GameObject drawPlatform(GameObject lastObject, GameObject objToSpawn, GameObject parentLevelObject)
     {
+
         Bounds bounds = this.getPrefabBounds(lastObject);
         Bounds b = this.getPrefabBounds(objToSpawn);
         Vector3 nextBlockLocation = new Vector3(lastObject.transform.position.x, lastObject.transform.position.y, lastObject.transform.position.z + bounds.extents.z + b.extents.z);
@@ -177,6 +178,11 @@ public class ProceduralGeneration : MonoBehaviour
 
             if (blockToSpawn > -1 && (blockToSpawn < levelBlocks.Count))
             {
+                if (this.spawnedLevelBlocks.Count == 3)
+                {
+                    blockToSpawn = 10;
+                }
+
                 blockObjToSpawn = levelBlocks[blockToSpawn];
                 instantiatedGameObject = this.drawPlatform(this.lastBlock, this.levelBlocks[blockToSpawn], this.levelParrent);
                 this.spawnedLevelBlocks.Add(instantiatedGameObject);

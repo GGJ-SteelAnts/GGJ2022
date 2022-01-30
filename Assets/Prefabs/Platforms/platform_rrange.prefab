@@ -202,7 +202,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   type: 6
-  speed: 10
+  speed: 8
   audioSource: {fileID: 7973800414101489524}
   audioClips:
   - {fileID: 8300000, guid: 0f9bc2d26d3715c42addd8d0afbe743f, type: 3}
