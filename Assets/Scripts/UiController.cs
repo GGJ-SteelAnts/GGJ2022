@@ -65,6 +65,9 @@ public class UiController : MonoBehaviour
             oldDistance = distance;
         }
     }
+    public void FixedUpdate(){
+        this.menuCamera.transform.position = this.menuCamera.transform.position + Vector3.forward * 0.05f;
+    }
 
     //MENU
     public void exitGame()
