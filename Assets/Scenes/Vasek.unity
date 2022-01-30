@@ -5115,7 +5115,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   levelBlocks:
-  - {fileID: 2391451336753015343, guid: 93bb790d9a43b864a85bb3679360efb7, type: 3}
+  - {fileID: 8768991388683709947, guid: 99c4e582c7358f346ab00dae4ae956f9, type: 3}
   - {fileID: 8768991388683709947, guid: 97d4c453fb5affa448968cb5ce9ca2f4, type: 3}
   - {fileID: 8768991388683709947, guid: 2e18815c9b04872428df50ccfc059d03, type: 3}
   - {fileID: 8768991388683709947, guid: 99c4e582c7358f346ab00dae4ae956f9, type: 3}
@@ -5129,6 +5129,11 @@ MonoBehaviour:
   - {fileID: 1316835597118596560, guid: 685c607395b2cfa46a548c481d178540, type: 3}
   - {fileID: 1316835597118596560, guid: edd9e993fa2520f4095e33c7552ecd54, type: 3}
   - {fileID: 1316835597118596560, guid: b140cd85c7d7ba64cbc9ab71d92e349e, type: 3}
+  - {fileID: 1316835597118596560, guid: f08c617a65323ea4698b78550d67a522, type: 3}
+  - {fileID: 1316835597118596560, guid: f49e09c4592323240bd4ce3118b564e7, type: 3}
+  - {fileID: 1316835597118596560, guid: 0d82c44d5545e904c9e0ba67412dafac, type: 3}
+  - {fileID: 1316835597118596560, guid: ef9719b73c1f78f4296b3cc38314a3e1, type: 3}
+  - {fileID: 1316835597118596560, guid: 777141dc8899e53449ff0fc184f0571c, type: 3}
   spawnedLevelBlocks: []
   backgroundBlocks:
   - {fileID: 5287741263160770601, guid: 7a596fa177a8fd34face58d8f58e0e41, type: 3}
