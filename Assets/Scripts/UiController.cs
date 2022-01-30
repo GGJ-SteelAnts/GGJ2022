@@ -16,7 +16,7 @@ public class UiController : MonoBehaviour
     public static bool isInMenu = true;
 
     public static float distance = 0;
-    public static int highScore = 0;
+    public static float highScore = 0;
     private float oldDistance = 0.0f;
 
     // Start is called before the first frame update
@@ -71,9 +71,13 @@ public class UiController : MonoBehaviour
         if (oldDistance < distance)
         {
             uiDistance.text = "Distance : " + distance.ToString("0");
-            uiHighScore.text = "HighScore : " + UiController.highScore.ToString("0");
             oldDistance = distance;
+            if (distance > highScore)
+            {
+                highScore = distance;
+            }
         }
+        uiHighScore.text = "HighScore : " + UiController.highScore.ToString("0");
     }
     public void FixedUpdate(){
         this.menuCamera.transform.position = this.menuCamera.transform.position + Vector3.forward * 0.05f;
