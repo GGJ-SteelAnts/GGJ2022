@@ -87,7 +87,7 @@ GameObject:
   - component: {fileID: 5458493816772439993}
   - component: {fileID: 6374445660222366211}
   m_Layer: 0
-  m_Name: platform_empty
+  m_Name: Platform_empty
   m_TagString: platform
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -116,7 +116,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8768991388683709947}
-  m_Mesh: {fileID: 4300000, guid: 8e5a3b6be3a077042965d2dbb744c259, type: 3}
+  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!114 &5458493816772439993
 MonoBehaviour:
   m_ObjectHideFlags: 0
