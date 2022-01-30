@@ -63,6 +63,7 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (UiController.isInMenu) return;
         rotationX += -Input.GetAxis("Mouse Y") * lookSpeed;
         rotationX = Mathf.Clamp(rotationX, -lookXLimit, lookXLimit);
         playerCamera.transform.localRotation = Quaternion.Euler(rotationX, 0, 0);
@@ -107,21 +108,28 @@ public class PlayerController : MonoBehaviour
             isGrounded = false;
         }
 
-        if (audioSource != null && audioClips.Count > 0) {
+        if (audioSource != null && audioClips.Count > 0)
+        {
             if ((currentSpeed + speedModifier) > speed * 3f && (currentSpeed + speedModifier) < speed * 6f)
             {
-                if (audioClips.Count > 1 && audioSource.clip != audioClips[1]) {
+                if (audioClips.Count > 1 && audioSource.clip != audioClips[1])
+                {
                     audioSource.Stop();
                     audioSource.clip = audioClips[1];
                     audioSource.Play();
                 }
-            } else if ((currentSpeed + speedModifier) <= speed * 3f) {
-                if (audioSource.clip != audioClips[0]) {
+            }
+            else if ((currentSpeed + speedModifier) <= speed * 3f)
+            {
+                if (audioSource.clip != audioClips[0])
+                {
                     audioSource.Stop();
                     audioSource.clip = audioClips[0];
                     audioSource.Play();
                 }
-            } else if ((currentSpeed + speedModifier) >= speed * 6f) {
+            }
+            else if ((currentSpeed + speedModifier) >= speed * 6f)
+            {
                 if (audioClips.Count > 2 && audioSource.clip != audioClips[2])
                 {
                     audioSource.Stop();
@@ -147,7 +155,7 @@ public class PlayerController : MonoBehaviour
             inAir = false;
         }
 
-        if (Vector3.Distance(transform.position, new Vector3(0f,0f, transform.position.z)) > 10f)
+        if (Vector3.Distance(transform.position, new Vector3(0f, 0f, transform.position.z)) > 10f)
         {
             // Debug.Log("Player is falling :)");
             this.isFalling = true;

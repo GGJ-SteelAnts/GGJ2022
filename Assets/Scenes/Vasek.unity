@@ -5291,7 +5291,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1942086892, guid: ec622cf6f0988bc42a99ba84304c15a9, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[3].m_MethodName
-      value: OnStartGameBtnClick
+      value: OnNewGameBtnClick
       objectReference: {fileID: 0}
     - target: {fileID: 1942086892, guid: ec622cf6f0988bc42a99ba84304c15a9, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[3].m_TargetAssemblyTypeName

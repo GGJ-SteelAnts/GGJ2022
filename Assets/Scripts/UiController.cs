@@ -13,6 +13,8 @@ public class UiController : MonoBehaviour
     public GameObject menuCamera;
     public GameObject playerCamera;
 
+    public static bool isInMenu = true;
+
     public static float distance = 0;
     public static int highScore = 0;
     private float oldDistance = 0.0f;
@@ -26,8 +28,9 @@ public class UiController : MonoBehaviour
 
         UiController.LoadGame();
     }
-    public void OnStartGameBtnClick()
+    public void OnNewGameBtnClick()
     {
+        UiController.isInMenu = false;
         menuCamera.SetActive(false);
         playerCamera.SetActive(true);
     }
