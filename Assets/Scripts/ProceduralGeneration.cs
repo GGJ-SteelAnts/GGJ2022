@@ -179,7 +179,14 @@ public class ProceduralGeneration : MonoBehaviour
             {
                 if (this.spawnedLevelBlocks.Count < 3)
                 {
-                    blockToSpawn = 10;
+                    blockToSpawn = 9;
+                }
+                else
+                {
+                    if (lastBlockPrefab.name == "platform_rrange" && levelBlocks[blockToSpawn].name != "platform_empty")
+                    {
+                        blockToSpawn = 3;
+                    }
                 }
 
                 blockObjToSpawn = levelBlocks[blockToSpawn];
@@ -188,13 +195,22 @@ public class ProceduralGeneration : MonoBehaviour
             }
             else
             {
-                List<GameObject> instantiatedGameObjectLists = this.spawnSpiralOfPlatforms(lastBlock, levelBlocks[0], this.levelParrent);
-                foreach (var spavnedBlock in instantiatedGameObjectLists)
+                if (lastBlockPrefab.name == "platform_rrange")
                 {
-                    this.spawnedLevelBlocks.Add(spavnedBlock);
+                    blockObjToSpawn = levelBlocks[3];
+                    instantiatedGameObject = this.drawPlatform(this.lastBlock, this.levelBlocks[3], this.levelParrent);
+                    this.spawnedLevelBlocks.Add(instantiatedGameObject);
                 }
-                instantiatedGameObject = this.spawnedLevelBlocks[this.spawnedLevelBlocks.Count - 1];
-                blockObjToSpawn = levelBlocks[0];
+                else
+                {
+                    List<GameObject> instantiatedGameObjectLists = this.spawnSpiralOfPlatforms(lastBlock, levelBlocks[0], this.levelParrent);
+                    foreach (var spavnedBlock in instantiatedGameObjectLists)
+                    {
+                        this.spawnedLevelBlocks.Add(spavnedBlock);
+                    }
+                    instantiatedGameObject = this.spawnedLevelBlocks[this.spawnedLevelBlocks.Count - 1];
+                    blockObjToSpawn = levelBlocks[0];
+                }
             }
 
             this.lastBlock = instantiatedGameObject;
