@@ -47,7 +47,7 @@ public class ProceduralGeneration : MonoBehaviour
     List<GameObject> spawnSpiralOfPlatforms(GameObject lastObject, GameObject objToSpawn, GameObject parentLevelObject)
     {
         // configuration:
-        float horizontalDistancePerPlatform = (float)Random.Range(1.0f, 3.0f);
+        float horizontalDistancePerPlatform = (float)Random.Range(2.0f, 3.0f);
 
         List<GameObject> levelBlocksSpawnTemp = new List<GameObject>();
         // Debug.Log("Building LOOP");

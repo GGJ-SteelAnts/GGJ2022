@@ -85,7 +85,7 @@ public class PlayerController : MonoBehaviour
         }
 
         float curSpeedX = canMove ? (currentSpeed + speedModifier) : 0;
-        float curSpeedY = canMove ? (currentSpeed + 5f + speedModifier) * Input.GetAxis("Horizontal") : 0;
+        float curSpeedY = canMove ? (currentSpeed + currentSpeed + speedModifier) * Input.GetAxis("Horizontal") : 0;
 
         moveDirection = (platformForward * curSpeedX * Time.deltaTime) + (transform.right * curSpeedY * Time.deltaTime);
 
@@ -157,7 +157,7 @@ public class PlayerController : MonoBehaviour
             axis = Vector3.Cross(-transform.up, saveDirection);
 
             angle = Mathf.Atan2(Vector3.Magnitude(axis), Vector3.Dot(-transform.up, saveDirection));
-            transform.RotateAround(axis, angle * Time.deltaTime * 5f);
+            transform.RotateAround(axis, angle * Time.deltaTime * 8f);
         }
 
         if (pullObject != null)
