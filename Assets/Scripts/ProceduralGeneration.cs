@@ -4,17 +4,38 @@ using UnityEngine;
 
 public class ProceduralGeneration : MonoBehaviour
 {
+    [Header("Level")]
     public List<GameObject> levelBlocks = new List<GameObject>();
+    private int maximumNumberOfPlatformsAtScene = 100;
     public List<GameObject> spawnedLevelBlocks = new List<GameObject>();
+    private float maximumDistanceOfPlatformFromPlayer = 20.0f;
+
+    [Header("Background")]
+    public List<GameObject> backgroundBlocks = new List<GameObject>();
+    public List<GameObject> backgroundLevelBlocks = new List<GameObject>();
+    private float maximumDistanceOfPlatformFromPlayerBg = 600.0f;
+
     public GameObject player = null;
     public GameObject lastBlock;
     private GameObject lastBlockPrefab;
-    private int spavnetobjectIndex = 0;
-    private int maximumNumberOfPlatformsAtScene = 100;
-    private float maximumDistanceOfPlatformFromPlayer = 20.0f;
     private GameObject levelParrent = null;
 
+    List<GameObject> spawnBackgroundObjects(Vector3 playerPosition, List<GameObject> backgroundBlocks, GameObject parentLevelObject)
+    {
+        List<GameObject> bgBlocksSpawnTemp = new List<GameObject>();
+        for (var i = 0; i < 200; i++)
+        {
+            int bgElement = Random.Range(0, backgroundBlocks.Count);
 
+            GameObject newBgObject = Instantiate(backgroundBlocks[bgElement], (Random.insideUnitSphere * Random.Range(300, maximumDistanceOfPlatformFromPlayerBg) + playerPosition + new Vector3(0, 0, 50)), (Quaternion.identity));
+            newBgObject.transform.Rotate(new Vector3(Random.Range(0, 360), Random.Range(0, 360), Random.Range(0, 360)));
+            newBgObject.transform.parent = parentLevelObject.transform;
+
+            bgBlocksSpawnTemp.Add(newBgObject);
+        }
+
+        return bgBlocksSpawnTemp;
+    }
     Bounds getPrefabBounds(GameObject go)
     {
         Renderer[] renderers = go.GetComponentsInChildren<Renderer>();
@@ -43,7 +64,6 @@ public class ProceduralGeneration : MonoBehaviour
         newObject.transform.parent = parentLevelObject.transform;
         return newObject;
     }
-
     List<GameObject> spawnSpiralOfPlatforms(GameObject lastObject, GameObject objToSpawn, GameObject parentLevelObject)
     {
         // configuration:
@@ -76,7 +96,6 @@ public class ProceduralGeneration : MonoBehaviour
 
         return levelBlocksSpawnTemp;
     }
-
     // Start is called before the first frame update
     void Start()
     {
@@ -84,8 +103,6 @@ public class ProceduralGeneration : MonoBehaviour
         lastBlockPrefab = this.gameObject.transform.GetChild(0).gameObject;
         lastBlock = this.gameObject.transform.GetChild(0).gameObject;
         this.spawnedLevelBlocks.Add(lastBlock);
-
-
     }
 
     // Update is called once per frame
@@ -94,9 +111,28 @@ public class ProceduralGeneration : MonoBehaviour
         Vector3 playerPosition = this.player.transform.position;
         PlayerController playerControlsSript = this.player.GetComponent<PlayerController>();
 
+        if (backgroundLevelBlocks.Count < 200)
+        {
+            foreach (var spavnedBgBlock in this.spawnBackgroundObjects(playerPosition, this.backgroundBlocks, this.levelParrent))
+            {
+                this.backgroundLevelBlocks.Add(spavnedBgBlock);
+            }
+        }
+
         if (playerControlsSript.isFalling)
         {
             return;
+        }
+
+        for (var i = 0; i < this.backgroundLevelBlocks.Count; i++)
+        {
+            float distance = Vector3.Distance(this.backgroundLevelBlocks[i].transform.position, playerPosition);
+            if (distance > this.maximumDistanceOfPlatformFromPlayer + maximumDistanceOfPlatformFromPlayerBg)
+            {
+
+                Destroy(this.backgroundLevelBlocks[i]);
+                this.backgroundLevelBlocks.Remove(this.backgroundLevelBlocks[i]);
+            }
         }
 
         for (var i = 0; i < this.spawnedLevelBlocks.Count; i++)
@@ -106,7 +142,6 @@ public class ProceduralGeneration : MonoBehaviour
             {
                 Destroy(this.spawnedLevelBlocks[i]);
                 this.spawnedLevelBlocks.Remove(this.spawnedLevelBlocks[i]);
-                spavnetobjectIndex++;
             }
             else
             {
