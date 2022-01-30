@@ -10,6 +10,9 @@ public class UiController : MonoBehaviour
     public TextMeshProUGUI uiDistance;
     public TextMeshProUGUI uiHighScore;
 
+    public GameObject menuCamera;
+    public GameObject playerCamera;
+
     public static float distance = 0;
     public static int highScore = 0;
     private float oldDistance = 0.0f;
@@ -22,6 +25,11 @@ public class UiController : MonoBehaviour
         Cursor.visible = true;
 
         UiController.LoadGame();
+    }
+    public void OnStartGameBtnClick()
+    {
+        menuCamera.SetActive(false);
+        playerCamera.SetActive(true);
     }
     public static void SaveGame()
     {

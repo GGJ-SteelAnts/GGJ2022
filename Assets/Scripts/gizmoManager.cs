@@ -7,7 +7,7 @@ public class gizmoManager : MonoBehaviour
 
     void OnDrawGizmos()
     {
-        if (!this.gameObject.transform.parent.name.Contains("chunk"))
+        if (this.gameObject != null && !this.gameObject.transform.parent.name.Contains("chunk"))
         {
             Bounds bounds = GetChildRendererBounds(gameObject);
             Gizmos.DrawWireCube(bounds.center, bounds.size);
