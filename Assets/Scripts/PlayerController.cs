@@ -71,7 +71,7 @@ public class PlayerController : MonoBehaviour
         isRunning = Input.GetKey(KeyCode.LeftShift);
         if (canMove && currentSpeed < minSpeed)
         {
-            currentSpeed += 0.0005f;
+            currentSpeed += 0.005f;
         }
 
         if (Input.GetAxis("Vertical") > 0 && currentSpeed < maxSpeed)
@@ -147,7 +147,7 @@ public class PlayerController : MonoBehaviour
             inAir = false;
         }
 
-        if (rb.velocity.magnitude != 0 && Vector3.Dot(rb.velocity.normalized, Physics.gravity.normalized) > 0)
+        if (Vector3.Distance(transform.position, new Vector3(0f,0f, transform.position.z)) > 10f)
         {
             // Debug.Log("Player is falling :)");
             this.isFalling = true;
@@ -167,33 +167,6 @@ public class PlayerController : MonoBehaviour
             transform.RotateAround(axis, angle * Time.deltaTime * 8f);
         }
 
-        if (pullObject != null)
-        {
-            PlatformManager platform = pullObject.GetComponent<PlatformManager>();
-            if (platform != null)
-            {
-                float step = platform.speed * Time.deltaTime * 10f;
-                rb.AddForce((pullObject.transform.position - transform.position) * step, ForceMode.Force);
-            }
-            if (Vector3.Distance(pullObject.transform.position, transform.position) > 5f)
-            {
-                pullObject = null;
-            }
-        }
-
-        if (pushObject != null)
-        {
-            PlatformManager platform = pushObject.GetComponent<PlatformManager>();
-            if (platform != null)
-            {
-                float step = platform.speed * Time.deltaTime * 10f;
-                rb.AddForce(-(pushObject.transform.position - transform.position) * step, ForceMode.Force);
-            }
-            if (Vector3.Distance(pushObject.transform.position, transform.position) > 5f)
-            {
-                pushObject = null;
-            }
-        }
         var distanceFromYAxis = new Vector2(rb.position.x, rb.position.y).magnitude;
         if (distanceFromYAxis > this.maxDistanceFromCenterLine)
         {
@@ -210,6 +183,23 @@ public class PlayerController : MonoBehaviour
         if (other.gameObject.tag == "platform")
         {
             Physics.gravity = this.downDirection * 9.81f;
+
+            PlatformManager platform = other.gameObject.GetComponent<PlatformManager>();
+
+            if (platform != null)
+            {
+                platform.Step();
+                float step = platform.speed * Time.deltaTime * 10f;
+                switch (platform.type)
+                {
+                    case PlatformManager.PlatformType.Push:
+                        rb.AddForce(-(other.transform.position - transform.position) * step, ForceMode.Force);
+                        break;
+                    case PlatformManager.PlatformType.Pull:
+                        rb.AddForce((other.transform.position - transform.position) * step, ForceMode.Force);
+                        break;
+                }
+            }
         }
     }
 
@@ -226,10 +216,10 @@ public class PlayerController : MonoBehaviour
 
         if (other.GetContact(0).normal == other.transform.forward
                 || other.GetContact(0).normal == -other.transform.forward
-                || other.GetContact(0).normal == -other.transform.right
-                || other.GetContact(0).normal == other.transform.right
                 || (other.GetContact(0).normal != -other.transform.up
-                    && other.GetContact(0).normal != other.transform.up)
+                    && other.GetContact(0).normal != other.transform.up
+                    && other.GetContact(0).normal != -other.transform.right
+                    && other.GetContact(0).normal != other.transform.right)
             )
         {
             return;
@@ -254,12 +244,8 @@ public class PlayerController : MonoBehaviour
                 switch (platform.type)
                 {
                     case PlatformManager.PlatformType.Push:
-                        pushObject = other.gameObject;
-                        pullObject = null;
                         break;
                     case PlatformManager.PlatformType.Pull:
-                        pullObject = other.gameObject;
-                        pushObject = null;
                         break;
                     case PlatformManager.PlatformType.RotateY:
                         break;
@@ -282,20 +268,20 @@ public class PlayerController : MonoBehaviour
             }
             if (other.GetContact(0).normal == other.transform.forward
                 || other.GetContact(0).normal == -other.transform.forward
-                || other.GetContact(0).normal == -other.transform.right
-                || other.GetContact(0).normal == other.transform.right
                 || (other.GetContact(0).normal != -other.transform.up
-                    && other.GetContact(0).normal != other.transform.up)
+                    && other.GetContact(0).normal != other.transform.up
+                    && other.GetContact(0).normal != -other.transform.right
+                    && other.GetContact(0).normal != other.transform.right)
             )
             {
                 return;
             }
 
-            Vector3 gDirection = -other.GetContact(0).normal;
-            saveDirection = gDirection;
+            Vector3 gDirection = -transform.up;
+            saveDirection = -other.GetContact(0).normal;
             if (platform == null)
             {
-                gDirection = -other.GetContact(0).normal;
+                gDirection = -transform.up;
             }
             platformForward = other.transform.forward;
             platformRight = other.transform.right;
