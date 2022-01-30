@@ -88,8 +88,8 @@ public class PlayerController : MonoBehaviour
             currentSpeed -= 0.01f;
         }
 
-        float curSpeedX = canMove ? (currentSpeed + speedModifier) : 0;
-        float curSpeedY = canMove ? (currentSpeed + currentSpeed + speedModifier) * Input.GetAxis("Horizontal") : 0;
+        float curSpeedX = canMove ? (currentSpeed + speedModifier): 0;
+        float curSpeedY = canMove ? (currentSpeed + speedModifier) * Input.GetAxis("Horizontal") : 0;
 
         moveDirection = (transform.forward * curSpeedX * Time.deltaTime) + (transform.right * curSpeedY * Time.deltaTime);
 
@@ -201,10 +201,10 @@ public class PlayerController : MonoBehaviour
                 switch (platform.type)
                 {
                     case PlatformManager.PlatformType.Push:
-                        rb.AddForce(-(other.transform.position - transform.position) * step, ForceMode.Force);
+                        rb.AddForce(-(other.transform.position - transform.position) * step, ForceMode.Impulse);
                         break;
                     case PlatformManager.PlatformType.Pull:
-                        rb.AddForce((other.transform.position - transform.position) * step, ForceMode.Force);
+                        rb.AddForce((other.transform.position - transform.position) * step, ForceMode.Impulse);
                         break;
                 }
             }
@@ -224,10 +224,10 @@ public class PlayerController : MonoBehaviour
 
         if (other.GetContact(0).normal == other.transform.forward
                 || other.GetContact(0).normal == -other.transform.forward
+                || other.GetContact(0).normal == -other.transform.right
+                || other.GetContact(0).normal == other.transform.right
                 || (other.GetContact(0).normal != -other.transform.up
-                    && other.GetContact(0).normal != other.transform.up
-                    && other.GetContact(0).normal != -other.transform.right
-                    && other.GetContact(0).normal != other.transform.right)
+                    && other.GetContact(0).normal != other.transform.up)
             )
         {
             return;
@@ -236,7 +236,7 @@ public class PlayerController : MonoBehaviour
         saveDirection = -other.GetContact(0).normal;
 
         // TODO: Handle other PlatformTypes
-        Physics.gravity = -other.GetContact(0).normal * 9.81f;
+        Physics.gravity = this.downDirection * 9.81f;
 
     }
 
@@ -276,17 +276,16 @@ public class PlayerController : MonoBehaviour
             }
             if (other.GetContact(0).normal == other.transform.forward
                 || other.GetContact(0).normal == -other.transform.forward
+                || other.GetContact(0).normal == -other.transform.right
+                || other.GetContact(0).normal == other.transform.right
                 || (other.GetContact(0).normal != -other.transform.up
-                    && other.GetContact(0).normal != other.transform.up
-                    && other.GetContact(0).normal != -other.transform.right
-                    && other.GetContact(0).normal != other.transform.right)
+                    && other.GetContact(0).normal != other.transform.up)
             )
             {
                 return;
             }
-
-            Vector3 gDirection = -transform.up;
             saveDirection = -other.GetContact(0).normal;
+            Vector3 gDirection = -transform.up;
             if (platform == null)
             {
                 gDirection = -transform.up;
