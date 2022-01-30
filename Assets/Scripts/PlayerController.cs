@@ -39,8 +39,6 @@ public class PlayerController : MonoBehaviour
 
     private Vector3 saveDirection;
     private Vector3 downDirection;
-    private Vector3 platformForward;
-    private Vector3 platformRight;
 
     private Vector3 follow = Vector3.zero;
 
@@ -50,8 +48,6 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody>();
-        platformForward = Vector3.forward;
-        platformRight = Vector3.right;
     }
 
     public void disableCursor()
@@ -72,7 +68,7 @@ public class PlayerController : MonoBehaviour
         isRunning = Input.GetKey(KeyCode.LeftShift);
         if (canMove && currentSpeed < minSpeed)
         {
-            currentSpeed += 0.005f;
+            currentSpeed += 0.01f;
         }
 
         if (Input.GetAxis("Vertical") > 0 && currentSpeed < maxSpeed)
@@ -202,10 +198,10 @@ public class PlayerController : MonoBehaviour
                 switch (platform.type)
                 {
                     case PlatformManager.PlatformType.Push:
-                        rb.AddForce(-(other.transform.position - transform.position) * step, ForceMode.Impulse);
+                        rb.AddForce(-saveDirection * step, ForceMode.VelocityChange);
                         break;
                     case PlatformManager.PlatformType.Pull:
-                        rb.AddForce((other.transform.position - transform.position) * step, ForceMode.Impulse);
+                        rb.AddForce(saveDirection * step, ForceMode.VelocityChange);
                         break;
                 }
             }
@@ -291,8 +287,6 @@ public class PlayerController : MonoBehaviour
             {
                 gDirection = -transform.up;
             }
-            platformForward = other.transform.forward;
-            platformRight = other.transform.right;
             this.downDirection = gDirection;
             Physics.gravity = gDirection * 9.81f;
         }
