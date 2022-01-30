@@ -193,7 +193,7 @@ public class PlayerController : MonoBehaviour
                 switch (platform.type)
                 {
                     case PlatformManager.PlatformType.Push:
-                        rb.AddForce(-(pushObject.transform.position - transform.position) * step, ForceMode.Force);
+                        rb.AddForce(-(other.transform.position - transform.position) * step, ForceMode.Force);
                         break;
                     case PlatformManager.PlatformType.Pull:
                         rb.AddForce((other.transform.position - transform.position) * step, ForceMode.Force);
