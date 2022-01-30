@@ -15,7 +15,7 @@ public class ProceduralGeneration : MonoBehaviour
     public List<GameObject> backgroundBlocks = new List<GameObject>();
     public List<GameObject> backgroundLevelBlocks = new List<GameObject>();
     private float maximumDistanceOfPlatformFromPlayerBg = 600.0f;
-    public GameObject bgParrent = null;
+    private GameObject bgParrent = null;
 
     public GameObject player = null;
     public GameObject lastBlock;
@@ -103,13 +103,16 @@ public class ProceduralGeneration : MonoBehaviour
         levelParrent = this.gameObject;
         lastBlockPrefab = this.gameObject.transform.GetChild(0).gameObject;
         lastBlock = this.gameObject.transform.GetChild(0).gameObject;
+        if (bgParrent == null)
+        {
+            bgParrent = GameObject.Find("Background");
+        }
         this.spawnedLevelBlocks.Add(lastBlock);
     }
 
     // Update is called once per frame
     void Update()
     {
-
         // if (playerControlsSript.isFalling)
         // {
         //     return;
@@ -159,7 +162,10 @@ public class ProceduralGeneration : MonoBehaviour
             int blockToSpawn = Random.Range(0, (levelBlocks.Count + 1));
 
 
-            if (levelBlocks[blockToSpawn].name == lastBlockPrefab.name)
+            if (
+                (blockToSpawn > -1 && (blockToSpawn < levelBlocks.Count)) &&
+                (levelBlocks[blockToSpawn].name == lastBlockPrefab.name)
+            )
             {
                 Debug.Log("Same Block");
                 if (blockToSpawn > levelBlocks.Count || blockToSpawn < 0)
