@@ -158,7 +158,7 @@ public class ProceduralGeneration : MonoBehaviour
             int blockToSpawn = Random.Range(0, (levelBlocks.Count + 1));
 
 
-            if (blockToSpawn > 31 && (blockToSpawn < levelBlocks.Count) && levelBlocks[blockToSpawn].name == lastBlockPrefab.name)
+            if (levelBlocks[blockToSpawn].name == lastBlockPrefab.name)
             {
                 Debug.Log("Same Block");
                 if (blockToSpawn > levelBlocks.Count || blockToSpawn < 0)
