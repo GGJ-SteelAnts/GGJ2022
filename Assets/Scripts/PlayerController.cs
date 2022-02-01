@@ -11,10 +11,14 @@ public class PlayerController : MonoBehaviour
     public float minSpeed = 5.0f;
     [HideInInspector]
     public float currentSpeed = 0f;
-    private float speedModifier = 0.0f;
+    [HideInInspector]
+    public float speedModifier = 0.0f;
     Vector3 moveDirection = Vector3.zero;
     bool canMove = false;
-    Rigidbody rb;
+    [HideInInspector]
+    public Rigidbody rb;
+    [HideInInspector]
+    public CharacterController chc;
     float moveDirectionY;
     public bool isRunning = false;
 
@@ -22,8 +26,12 @@ public class PlayerController : MonoBehaviour
     [Header("Jump")]
     public float jumpSpeed = 7.5f;
     [HideInInspector]
+    public float jumpModifier = 0.0f;
+    [HideInInspector]
     public bool inAir = false;
     private bool isGrounded = false;
+    private float jumpTimer = 0.1f;
+    private float jumpTime = 0f;
     [Header("Camera")]
     public float lookSpeed = 7.5f;
     public float lookXLimit = 40.0f;
@@ -35,10 +43,14 @@ public class PlayerController : MonoBehaviour
     public AudioSource audioSource;
     public List<AudioClip> jumpClips = new List<AudioClip>();
     public List<AudioClip> audioClips = new List<AudioClip>();
+    PlatformManager collidePlatform;
+    string platformStatus = "exit";
     // Start is called before the first frame update
 
-    private Vector3 saveDirection;
+    [HideInInspector]
+    public Vector3 saveDirection;
     private Vector3 downDirection;
+    Vector3 _velocity = Vector3.zero;
 
     private Vector3 follow = Vector3.zero;
 
@@ -47,7 +59,8 @@ public class PlayerController : MonoBehaviour
 
     void Start()
     {
-        rb = GetComponent<Rigidbody>();
+        //rb = GetComponent<Rigidbody>();
+        chc = GetComponent<CharacterController>();
     }
 
     public void disableCursor()
@@ -68,7 +81,7 @@ public class PlayerController : MonoBehaviour
         isRunning = Input.GetKey(KeyCode.LeftShift);
         if (canMove && currentSpeed < minSpeed)
         {
-            currentSpeed += 0.01f;
+            currentSpeed += 0.1f;
         }
 
         if (Input.GetAxis("Vertical") > 0 && currentSpeed < maxSpeed)
@@ -85,7 +98,7 @@ public class PlayerController : MonoBehaviour
         }
 
         float curSpeedX = canMove ? (currentSpeed + speedModifier): 0;
-        float curSpeedY = canMove ? (currentSpeed + speedModifier) * Input.GetAxis("Horizontal") : 0;
+        float curSpeedY = canMove ? speed * Input.GetAxis("Horizontal") : 0;
 
         moveDirection = (transform.forward * curSpeedX * Time.deltaTime) + (transform.right * curSpeedY * Time.deltaTime);
 
@@ -96,12 +109,6 @@ public class PlayerController : MonoBehaviour
         else if ((currentSpeed + speedModifier) < maxSpeed && runningParticles.isPlaying)
         {
             runningParticles.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
-        }
-
-        if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
-        {
-            inAir = true;
-            isGrounded = false;
         }
 
         if (audioSource != null && audioClips.Count > 0)
@@ -135,21 +142,88 @@ public class PlayerController : MonoBehaviour
             }
         }
 
-        rb.MovePosition(rb.position + moveDirection);
+        PlatformManager localP = null;
+        if (collidePlatform != null)
+        {
+            collidePlatform.Step();
+            collidePlatform.Action(this, platformStatus);
+            localP = collidePlatform;
+            if (platformStatus == "enter")
+            {
+                platformStatus = "stay";
+                collidePlatform = null;
+            }
+        }
+        else
+        {
+            if (platformStatus == "stay")
+            {
+                platformStatus = "exit";
+                if (localP != null)
+                {
+                    localP.Action(this, platformStatus);
+                    localP = null;
+                }
+            }
+        }
+
+        if (jumpTime <= Time.time)
+        {
+            jumpModifier = 0.0f;
+            Vector3 locGrav = (Physics.gravity * Time.deltaTime);
+            if (!isGrounded)
+            {
+                _velocity += Physics.gravity / 50 * Time.deltaTime;
+            }
+            else
+            {
+                _velocity = Physics.gravity * Time.deltaTime;
+            }
+        }
+        else
+        {
+            _velocity += transform.up * (jumpSpeed + jumpModifier) / 5 * Time.deltaTime;
+        }
+
+        if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
+        {
+            //inAir = true;
+            if (audioSource != null && jumpClips.Count > 0)
+            {
+                audioSource.PlayOneShot(jumpClips[Random.Range(0, jumpClips.Count)]);
+            }
+            _velocity = Vector3.zero;
+            jumpTime = jumpTimer + Time.time;
+            isGrounded = false;
+        }
+
+        chc.Move(moveDirection + _velocity);
+
+        //rb.MovePosition(rb.position + moveDirection);
     }
 
     private void FixedUpdate()
     {
-        if (inAir)
+        downDirection = -transform.up;
+        if (Physics.gravity != (downDirection * 9.81f)) {
+            if (downDirection == Vector3.forward)
+            {
+                downDirection = Vector3.down;
+            }
+            Physics.gravity = downDirection * 9.81f;
+        }
+
+        /*if (inAir)
         {
             // Debug.Log("Jump");
             if (audioSource != null && jumpClips.Count > 0)
             {
                 audioSource.PlayOneShot(jumpClips[Random.Range(0, jumpClips.Count)]);
             }
-            rb.AddForce(transform.up * jumpSpeed * 100f * Time.deltaTime, ForceMode.Impulse);
+            chc.Move(transform.up * jumpSpeed * 100f * Time.deltaTime);
+            //rb.AddForce(transform.up * jumpSpeed * 100f * Time.deltaTime, ForceMode.Impulse);
             inAir = false;
-        }
+        }*/
 
         if (Vector3.Distance(transform.position, new Vector3(0f, 0f, transform.position.z)) > 10f)
         {
@@ -161,7 +235,7 @@ public class PlayerController : MonoBehaviour
             this.isFalling = false;
         }
 
-        if (saveDirection != Vector3.zero)
+        if (saveDirection != -transform.up)
         {
             Vector3 axis;
             float angle;
@@ -171,125 +245,83 @@ public class PlayerController : MonoBehaviour
             transform.RotateAround(axis, angle * Time.deltaTime * 8f);
         }
 
-        var distanceFromYAxis = new Vector2(rb.position.x, rb.position.y).magnitude;
+        var distanceFromYAxis = new Vector2(transform.position.x, transform.position.y).magnitude;
         if (UiController.isInMenu == false && distanceFromYAxis > this.maxDistanceFromCenterLine)
         {
             Debug.Log("Player fell out of map.");
-            rb.velocity = Vector3.zero;
+            //rb.velocity = Vector3.zero;
             UiController.isInMenu = true;
-            Physics.gravity = -Vector3.up * 9.81f;
+            Physics.gravity = Vector3.down * 9.81f;
             UiController.SaveGame();
             UnityEngine.SceneManagement.SceneManager.LoadScene(0);
         }
     }
 
-    void OnCollisionExit(Collision other)
+    /*void OnCollisionExit(Collision other)
     {
-        if (other.gameObject.tag == "platform")
-        {
-            Physics.gravity = this.downDirection * 9.81f;
+        if (other.gameObject.tag != "platform") return;
 
-            PlatformManager platform = other.gameObject.GetComponent<PlatformManager>();
+        PlatformManager platform = other.gameObject.GetComponent<PlatformManager>();
 
-            if (platform != null)
-            {
-                platform.Step();
-                float step = platform.speed * Time.deltaTime * 10f;
-                switch (platform.type)
-                {
-                    case PlatformManager.PlatformType.Push:
-                        rb.AddForce(-saveDirection * step, ForceMode.VelocityChange);
-                        break;
-                    case PlatformManager.PlatformType.Pull:
-                        rb.AddForce(saveDirection * step, ForceMode.VelocityChange);
-                        break;
-                }
-            }
-        }
+        if (platform == null) return;
+
+        platform.Step();
+        platform.Action(this, "exit");
     }
 
     void OnCollisionStay(Collision other)
     {
         if (other.gameObject.tag != "platform") return;
-        PlatformManager platform = other.gameObject.GetComponent<PlatformManager>();
-        if (platform == null)
-        {
-            // FIXME: Should platforms be allowed to not to have a PlatformManager?
-            // Debug.Log("ERROR");
+
+        Vector3 contact = other.GetContact(other.contacts.Length - 1).normal;
+        if (contact != -other.transform.up && contact != other.transform.up) {
             return;
         }
 
-        if (other.GetContact(other.contacts.Length - 1).normal == other.transform.forward
-                || other.GetContact(other.contacts.Length - 1).normal == -other.transform.forward
-                || other.GetContact(other.contacts.Length - 1).normal == -other.transform.right
-                || other.GetContact(other.contacts.Length - 1).normal == other.transform.right
-                || (other.GetContact(other.contacts.Length - 1).normal != -other.transform.up
-                    && other.GetContact(other.contacts.Length - 1).normal != other.transform.up)
-            )
-        {
-            return;
-        }
-        this.downDirection = -transform.up;
-        saveDirection = -other.GetContact(other.contacts.Length - 1).normal;
-
-        // TODO: Handle other PlatformTypes
-        Physics.gravity = this.downDirection * 9.81f;
-
+        saveDirection = -contact;
     }
 
     void OnCollisionEnter(Collision other)
     {
+        Debug.Log("Collide :D");
         isGrounded = true;
-        if (other.gameObject.tag == "platform")
+        if (other.gameObject.tag != "platform") return;
+
+        PlatformManager platform = other.gameObject.GetComponent<PlatformManager>();
+
+        if (platform != null)
         {
-            PlatformManager platform = other.gameObject.GetComponent<PlatformManager>();
-            if (platform != null)
-            {
-                platform.Step();
-                switch (platform.type)
-                {
-                    case PlatformManager.PlatformType.Push:
-                        break;
-                    case PlatformManager.PlatformType.Pull:
-                        break;
-                    case PlatformManager.PlatformType.RotateY:
-                        break;
-                    case PlatformManager.PlatformType.RotateZ:
-                        break;
-                    case PlatformManager.PlatformType.SpeedUp:
-                        speedModifier += platform.speed;
-                        break;
-                    case PlatformManager.PlatformType.SpeedDown:
-                        if (speedModifier - platform.speed >= 0)
-                        {
-                            speedModifier -= platform.speed;
-                        }
-                        else
-                        {
-                            speedModifier = 0.0f;
-                        }
-                        break;
-                }
-            }
-            if (other.GetContact(0).normal == other.transform.forward
-                || other.GetContact(0).normal == -other.transform.forward
-                || other.GetContact(0).normal == -other.transform.right
-                || other.GetContact(0).normal == other.transform.right
-                || (other.GetContact(0).normal != -other.transform.up
-                    && other.GetContact(0).normal != other.transform.up)
-            )
-            {
-                return;
-            }
-            saveDirection = -other.GetContact(0).normal;
-            Vector3 gDirection = -transform.up;
-            if (platform == null)
-            {
-                gDirection = -transform.up;
-            }
-            this.downDirection = gDirection;
-            Physics.gravity = gDirection * 9.81f;
+            platform.Step();
+            platform.Action(this, "enter");
         }
+
+        Vector3 contact = other.GetContact(other.contacts.Length - 1).normal;
+        if (contact != -other.transform.up &&
+            contact != other.transform.up) {
+            return;
+        }
+
+        saveDirection = -contact;
+    } */
+
+    void OnControllerColliderHit(ControllerColliderHit hit)
+    {
+        isGrounded = true;
+        if (platformStatus == "exit") {
+            platformStatus = "enter";
+        }
+        if (hit.gameObject.tag != "platform") return;
+
+        collidePlatform = hit.gameObject.GetComponent<PlatformManager>();
+
+        Vector3 contact = hit.normal;
+        if (contact != -hit.gameObject.transform.up &&
+            contact != hit.gameObject.transform.up)
+        {
+            return;
+        }
+
+        saveDirection = -contact;
     }
 
 }

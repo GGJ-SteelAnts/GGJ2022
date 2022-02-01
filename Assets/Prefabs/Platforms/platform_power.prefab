@@ -97,7 +97,6 @@ GameObject:
   - component: {fileID: 6189155224637060765}
   - component: {fileID: -443919199017515566}
   - component: {fileID: -731181381576803345}
-  - component: {fileID: 3389900204265069980}
   m_Layer: 0
   m_Name: platform_power
   m_TagString: platform
@@ -212,19 +211,3 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 61dae18984b7ff147ab1d77fb817687a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!54 &3389900204265069980
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7678802340880963262}
-  serializedVersion: 2
-  m_Mass: 50
-  m_Drag: 0
-  m_AngularDrag: 0
-  m_UseGravity: 0
-  m_IsKinematic: 0
-  m_Interpolate: 0
-  m_Constraints: 126
-  m_CollisionDetection: 1

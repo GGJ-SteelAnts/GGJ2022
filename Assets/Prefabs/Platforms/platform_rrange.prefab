@@ -115,7 +115,6 @@ GameObject:
   - component: {fileID: 6218203028538785626}
   - component: {fileID: 1204402889283165505}
   - component: {fileID: 7973800414101489524}
-  - component: {fileID: 6165408165884203318}
   m_Layer: 0
   m_Name: platform_rrange
   m_TagString: platform
@@ -330,19 +329,3 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!54 &6165408165884203318
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6650340373999088090}
-  serializedVersion: 2
-  m_Mass: 50
-  m_Drag: 0
-  m_AngularDrag: 0
-  m_UseGravity: 0
-  m_IsKinematic: 0
-  m_Interpolate: 0
-  m_Constraints: 126
-  m_CollisionDetection: 1

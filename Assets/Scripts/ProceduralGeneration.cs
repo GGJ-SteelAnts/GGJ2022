@@ -79,9 +79,6 @@ public class ProceduralGeneration : MonoBehaviour
         float angle = 360f / (float)pieceCount;
 
         Bounds bounds = this.getPrefabBounds(lastObject);
-        Bounds b = this.getPrefabBounds(objToSpawn);
-
-        Vector3 centerPoint = new Vector3(lastObject.transform.position.x, (lastObject.transform.position.y + radius), lastObject.transform.position.z + (lastObject.name.Contains("chunk") ? bounds.size.z : bounds.extents.z) + b.extents.z);
 
         float heightOffset = radius;
 
@@ -92,7 +89,7 @@ public class ProceduralGeneration : MonoBehaviour
             Vector3 position = (lastObject.transform.position + (direction * radius));
 
             GameObject newObject = Instantiate(objToSpawn, new Vector3(position.x, position.y + heightOffset, position.z + (float)(i * horizontalDistancePerPlatform) + (lastObject.name.Contains("chunk") ? bounds.extents.z : 0f)), rotation);
-            newObject.transform.parent = parentLevelObject.transform;
+            //newObject.transform.parent = parentLevelObject.transform;
             levelBlocksSpawnTemp.Add(newObject);
         }
 
@@ -144,7 +141,7 @@ public class ProceduralGeneration : MonoBehaviour
         for (var i = 0; i < this.spawnedLevelBlocks.Count; i++)
         {
             float distance = Vector3.Distance(this.spawnedLevelBlocks[i].transform.position, playerPosition);
-            if (distance > this.maximumDistanceOfPlatformFromPlayer && this.spawnedLevelBlocks.Count >= this.maximumNumberOfPlatformsAtScene && playerPosition.z > this.spawnedLevelBlocks[i].transform.position.z)
+            if (distance > this.maximumDistanceOfPlatformFromPlayer && this.spawnedLevelBlocks.Count >= this.maximumNumberOfPlatformsAtScene && playerPosition.z > this.spawnedLevelBlocks[i].transform.position.z + 2)
             {
                 Destroy(this.spawnedLevelBlocks[i]);
                 this.spawnedLevelBlocks.Remove(this.spawnedLevelBlocks[i]);

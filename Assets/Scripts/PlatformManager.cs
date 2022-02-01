@@ -27,4 +27,48 @@ public class PlatformManager : MonoBehaviour
             audioSource.PlayOneShot(audioClips[Random.Range(0, audioClips.Count)]);
         }
     }
+
+    public void Action(PlayerController player, string status)
+    {
+        switch (type)
+        {
+            case PlatformType.Basic:
+                return;
+            case PlatformType.Pull:
+                if (status == "exit")
+                {
+                    player.jumpModifier = speed * 10f;
+                }
+                return;
+            case PlatformType.Push:
+                if (status == "exit")
+                {
+                    player.jumpModifier = speed * 10f;
+                }
+                return;
+            case PlatformType.RotateY:
+                return;
+            case PlatformType.RotateZ:
+                return;
+            case PlatformType.SpeedDown:
+                if (status == "enter")
+                {
+                    if (player.speedModifier - speed >= 0)
+                    {
+                        player.speedModifier -= speed;
+                    }
+                    else
+                    {
+                        player.speedModifier = 0.0f;
+                    }
+                }
+                return;
+            case PlatformType.SpeedUp:
+                if (status == "enter")
+                {
+                    player.speedModifier += speed;
+                }
+                return;
+        }
+    }
 }
