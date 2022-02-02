@@ -44,7 +44,7 @@ public class PlayerController : MonoBehaviour
     PlatformManager collidePlatform;
     GameObject colliderObject;
     public string platformStatus = "exit";
-    float fallingTimer = 0.1f;
+    float fallingTimer = 0.5f;
     float fallingTime = 0f;
     // Start is called before the first frame update
 
@@ -114,7 +114,7 @@ public class PlayerController : MonoBehaviour
 
         if (audioSource != null && audioClips.Count > 0)
         {
-            if ((currentSpeed + speedModifier) > speed * 3f && (currentSpeed + speedModifier) < speed * 6f)
+            if ((currentSpeed + speedModifier) > speed * 6f && (currentSpeed + speedModifier) < speed * 8f)
             {
                 if (audioClips.Count > 1 && audioSource.clip != audioClips[1])
                 {
@@ -123,7 +123,7 @@ public class PlayerController : MonoBehaviour
                     audioSource.Play();
                 }
             }
-            else if ((currentSpeed + speedModifier) <= speed * 3f)
+            else if ((currentSpeed + speedModifier) <= speed * 6f)
             {
                 if (audioSource.clip != audioClips[0])
                 {
@@ -132,7 +132,7 @@ public class PlayerController : MonoBehaviour
                     audioSource.Play();
                 }
             }
-            else if ((currentSpeed + speedModifier) >= speed * 6f)
+            else if ((currentSpeed + speedModifier) >= speed * 8f)
             {
                 if (audioClips.Count > 2 && audioSource.clip != audioClips[2])
                 {
@@ -179,7 +179,7 @@ public class PlayerController : MonoBehaviour
             }
         }
 
-        if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
+        if (Input.GetKeyDown(KeyCode.Space) && (isGrounded || fallingTime > Time.time))
         {
             //inAir = true;
             if (audioSource != null && jumpClips.Count > 0)
@@ -187,6 +187,7 @@ public class PlayerController : MonoBehaviour
                 audioSource.PlayOneShot(jumpClips[Random.Range(0, jumpClips.Count)]);
             }
             _velocity = Vector3.zero;
+            fallingTime = Time.time;
             jumpTime = jumpTimer + Time.time;
             isGrounded = false;
         }
@@ -213,10 +214,7 @@ public class PlayerController : MonoBehaviour
 
         if (platformStatus == "exit")
         {
-            if (fallingTime < Time.time)
-            {
-                isGrounded = false;
-            }
+           isGrounded = false;
         }
     }
 

@@ -1869,7 +1869,7 @@ MonoBehaviour:
   chc: {fileID: 0}
   isRunning: 0
   isFalling: 0
-  jumpSpeed: 1
+  jumpSpeed: 3
   jumpModifier: 0
   inAir: 0
   lookSpeed: 5
