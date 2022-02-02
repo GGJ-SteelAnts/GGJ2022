@@ -179,6 +179,7 @@ GameObject:
   - component: {fileID: 411423064055404482}
   - component: {fileID: 459485775853362848}
   - component: {fileID: 2187729912207573111}
+  - component: {fileID: -6415571428727075267}
   m_Layer: 0
   m_Name: platform_start
   m_TagString: platform
@@ -214,7 +215,7 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 5, y: 0.5, z: 5}
+  m_Size: {x: 6, y: 0.5, z: 6}
   m_Center: {x: 0, y: 0.25, z: 0}
 --- !u!33 &411423064055404482
 MeshFilter:
@@ -278,3 +279,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 61dae18984b7ff147ab1d77fb817687a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &-6415571428727075267
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2628890434173161082}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fdc803964e5f2b042bece1765b69164f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  type: 0
+  speed: 0
+  audioSource: {fileID: 0}
+  audioClips: []

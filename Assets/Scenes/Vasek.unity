@@ -5273,6 +5273,10 @@ PrefabInstance:
       propertyPath: jumpSpeed
       value: 3
       objectReference: {fileID: 0}
+    - target: {fileID: 3244356566819001086, guid: ec622cf6f0988bc42a99ba84304c15a9, type: 3}
+      propertyPath: maxDistanceFromCenterLine
+      value: 35
+      objectReference: {fileID: 0}
     - target: {fileID: 3244356567246256142, guid: ec622cf6f0988bc42a99ba84304c15a9, type: 3}
       propertyPath: menuCamera
       value: 

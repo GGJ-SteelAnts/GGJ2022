@@ -35,15 +35,23 @@ public class PlatformManager : MonoBehaviour
             case PlatformType.Basic:
                 return;
             case PlatformType.Pull:
-                if (status == "exit")
+                if (status == "stay")
                 {
-                    player.jumpModifier = speed * 10f;
+                    player.jumpModifier = -speed / 10f;
+                }
+                else if (status == "exit")
+                {
+                    player.jumpModifier = 0f;
                 }
                 return;
             case PlatformType.Push:
-                if (status == "exit")
+                if (status == "stay")
                 {
-                    player.jumpModifier = speed * 10f;
+                    player.jumpModifier = speed / 10f;
+                }
+                else if (status == "exit")
+                {
+                    player.jumpModifier = 0f;
                 }
                 return;
             case PlatformType.RotateY:

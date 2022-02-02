@@ -11,7 +11,6 @@ public class PlayerController : MonoBehaviour
     public float minSpeed = 5.0f;
     [HideInInspector]
     public float currentSpeed = 0f;
-    [HideInInspector]
     public float speedModifier = 0.0f;
     Vector3 moveDirection = Vector3.zero;
     bool canMove = false;
@@ -25,7 +24,6 @@ public class PlayerController : MonoBehaviour
     public bool isFalling = false;
     [Header("Jump")]
     public float jumpSpeed = 7.5f;
-    [HideInInspector]
     public float jumpModifier = 0.0f;
     [HideInInspector]
     public bool inAir = false;
@@ -44,7 +42,10 @@ public class PlayerController : MonoBehaviour
     public List<AudioClip> jumpClips = new List<AudioClip>();
     public List<AudioClip> audioClips = new List<AudioClip>();
     PlatformManager collidePlatform;
-    string platformStatus = "exit";
+    GameObject colliderObject;
+    public string platformStatus = "exit";
+    float fallingTimer = 0.1f;
+    float fallingTime = 0f;
     // Start is called before the first frame update
 
     [HideInInspector]
@@ -142,13 +143,23 @@ public class PlayerController : MonoBehaviour
             }
         }
 
+        if (saveDirection != -transform.up)
+        {
+            Vector3 axis;
+            float angle;
+            axis = Vector3.Cross(-transform.up, saveDirection);
+
+            angle = Mathf.Atan2(Vector3.Magnitude(axis), Vector3.Dot(-transform.up, saveDirection));
+            transform.RotateAround(axis, angle * Time.deltaTime * 8f);
+        }
+
         PlatformManager localP = null;
         if (collidePlatform != null)
         {
             collidePlatform.Step();
             collidePlatform.Action(this, platformStatus);
             localP = collidePlatform;
-            if (platformStatus == "enter")
+            if (platformStatus == "enter" || platformStatus == "stay")
             {
                 platformStatus = "stay";
                 collidePlatform = null;
@@ -159,30 +170,13 @@ public class PlayerController : MonoBehaviour
             if (platformStatus == "stay")
             {
                 platformStatus = "exit";
+                fallingTime = fallingTimer + Time.time;
                 if (localP != null)
                 {
                     localP.Action(this, platformStatus);
                     localP = null;
                 }
             }
-        }
-
-        if (jumpTime <= Time.time)
-        {
-            jumpModifier = 0.0f;
-            Vector3 locGrav = (Physics.gravity * Time.deltaTime);
-            if (!isGrounded)
-            {
-                _velocity += Physics.gravity / 50 * Time.deltaTime;
-            }
-            else
-            {
-                _velocity = Physics.gravity * Time.deltaTime;
-            }
-        }
-        else
-        {
-            _velocity += transform.up * (jumpSpeed + jumpModifier) / 5 * Time.deltaTime;
         }
 
         if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
@@ -197,9 +191,33 @@ public class PlayerController : MonoBehaviour
             isGrounded = false;
         }
 
+        if (jumpTime <= Time.time)
+        {
+            if (!isGrounded)
+            {
+                _velocity += Physics.gravity / 50 * Time.deltaTime;
+            }
+            else
+            {
+                _velocity = Physics.gravity / 10 * Time.deltaTime;
+            }
+        }
+        else
+        {
+            _velocity += transform.up * (jumpSpeed + jumpModifier) / 5 * Time.deltaTime;
+        }
+
         chc.Move(moveDirection + _velocity);
 
         //rb.MovePosition(rb.position + moveDirection);
+
+        if (platformStatus == "exit")
+        {
+            if (fallingTime < Time.time)
+            {
+                isGrounded = false;
+            }
+        }
     }
 
     private void FixedUpdate()
@@ -233,16 +251,6 @@ public class PlayerController : MonoBehaviour
         else
         {
             this.isFalling = false;
-        }
-
-        if (saveDirection != -transform.up)
-        {
-            Vector3 axis;
-            float angle;
-            axis = Vector3.Cross(-transform.up, saveDirection);
-
-            angle = Mathf.Atan2(Vector3.Magnitude(axis), Vector3.Dot(-transform.up, saveDirection));
-            transform.RotateAround(axis, angle * Time.deltaTime * 8f);
         }
 
         var distanceFromYAxis = new Vector2(transform.position.x, transform.position.y).magnitude;
@@ -306,17 +314,25 @@ public class PlayerController : MonoBehaviour
 
     void OnControllerColliderHit(ControllerColliderHit hit)
     {
-        isGrounded = true;
-        if (platformStatus == "exit") {
+        Vector3 contact = hit.normal;
+        if (contact.normalized != -hit.gameObject.transform.right.normalized &&
+            contact.normalized != hit.gameObject.transform.right.normalized &&
+            contact.normalized != hit.gameObject.transform.forward.normalized &&
+            contact.normalized != -hit.gameObject.transform.forward.normalized)
+        {
+            jumpModifier = 0.0f;
+            isGrounded = true;
+        }
+        if (platformStatus == "exit" || colliderObject != hit.gameObject) {
             platformStatus = "enter";
         }
         if (hit.gameObject.tag != "platform") return;
 
+        colliderObject = hit.gameObject;
         collidePlatform = hit.gameObject.GetComponent<PlatformManager>();
 
-        Vector3 contact = hit.normal;
-        if (contact != -hit.gameObject.transform.up &&
-            contact != hit.gameObject.transform.up)
+        if (contact.normalized != -hit.gameObject.transform.up.normalized &&
+            contact.normalized != hit.gameObject.transform.up.normalized)
         {
             return;
         }

@@ -1859,7 +1859,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b108dca155b156640a1beb1eeaa1995d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxDistanceFromCenterLine: 30
+  maxDistanceFromCenterLine: 40
   speed: 7.5
   maxSpeed: 15
   minSpeed: 5
@@ -1889,7 +1889,7 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 5e15f53ccc08c4e4496e13306a9e4743, type: 3}
   - {fileID: 8300000, guid: 049628ae43735224990d9bcea2f744ad, type: 3}
   - {fileID: 8300000, guid: 227c760da48796046b26b76b3706319b, type: 3}
-  collide: 0
+  platformStatus: exit
   saveDirection: {x: 0, y: 0, z: 0}
 --- !u!82 &1943902172017936589
 AudioSource:
@@ -2355,7 +2355,7 @@ Camera:
     y: 0
     width: 1
     height: 1
-  near clip plane: 0.1
+  near clip plane: 0.3
   far clip plane: 1000
   field of view: 60
   orthographic: 0

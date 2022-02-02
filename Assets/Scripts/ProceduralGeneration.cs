@@ -61,7 +61,7 @@ public class ProceduralGeneration : MonoBehaviour
 
         Bounds bounds = this.getPrefabBounds(lastObject);
         Bounds b = this.getPrefabBounds(objToSpawn);
-        Vector3 nextBlockLocation = new Vector3(lastObject.transform.position.x, lastObject.transform.position.y, lastObject.transform.position.z + bounds.extents.z + b.extents.z);
+        Vector3 nextBlockLocation = new Vector3(objToSpawn.transform.position.x, objToSpawn.transform.position.y, lastObject.transform.position.z + bounds.extents.z + b.extents.z);
         GameObject newObject = Instantiate(objToSpawn, nextBlockLocation, (Quaternion.identity));
         newObject.transform.parent = parentLevelObject.transform;
         return newObject;
@@ -141,7 +141,7 @@ public class ProceduralGeneration : MonoBehaviour
         for (var i = 0; i < this.spawnedLevelBlocks.Count; i++)
         {
             float distance = Vector3.Distance(this.spawnedLevelBlocks[i].transform.position, playerPosition);
-            if (distance > this.maximumDistanceOfPlatformFromPlayer && this.spawnedLevelBlocks.Count >= this.maximumNumberOfPlatformsAtScene && playerPosition.z > this.spawnedLevelBlocks[i].transform.position.z + 2)
+            if (distance > this.maximumDistanceOfPlatformFromPlayer && this.spawnedLevelBlocks.Count >= this.maximumNumberOfPlatformsAtScene && playerPosition.z > this.spawnedLevelBlocks[i].transform.position.z + 3f)
             {
                 Destroy(this.spawnedLevelBlocks[i]);
                 this.spawnedLevelBlocks.Remove(this.spawnedLevelBlocks[i]);
