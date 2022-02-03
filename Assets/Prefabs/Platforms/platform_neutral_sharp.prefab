@@ -97,7 +97,7 @@ GameObject:
   - component: {fileID: 8372693939530454457}
   - component: {fileID: 1381875388291725606}
   m_Layer: 0
-  m_Name: platform_neutral_sharp
+  m_Name: Platform_Neutral_Sharp
   m_TagString: platform
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
